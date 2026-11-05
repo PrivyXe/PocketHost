@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title data-i18n="meta.title">PocketHost — Telefonunu web sunucusuna dönüştür</title>
+  <meta name="description" data-i18n-attr="content:meta.desc" content="PocketHost, AI ile ürettiğin statik siteyi ZIP olarak telefonuna atıp tek dokunuşla yayınlamanı sağlar. Linux yok, Termux yok, root yok." />
+  <meta name="theme-color" content="#070b0f" />
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    html[data-theme="dark"] { background: #070b0f; }
+    html[data-theme="light"] { background: #f6f8fb; }
+  </style>
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("ph-theme");
+        if (saved === "light" || saved === "dark") document.documentElement.dataset.theme = saved;
+      } catch (e) { /* ignore */ }
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-i18n="a11y.skip">İçeriğe geç</a>
+
+  <header class="nav" id="nav">
+    <div class="nav-inner container">
+      <a class="brand" href="#top">
+        <img src="assets/logo.svg" alt="" width="34" height="34" />
+        <span>PocketHost</span>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#ozellikler" data-i18n="nav.features">Özellikler</a>
+        <a href="#nasil" data-i18n="nav.how">Nasıl çalışır</a>
+        <a href="#ekranlar" data-i18n="nav.screens">Ekranlar</a>
+        <a href="#teknik" data-i18n="nav.specs">Teknik</a>
+        <a href="#sss" data-i18n="nav.faq">SSS</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="lang-switch" role="group" data-i18n-attr="aria-label:nav.langAria" aria-label="Dil">
+          <button type="button" data-lang="tr" aria-pressed="true">TR</button>
+          <button type="button" data-lang="en" aria-pressed="false">EN</button>
+          <button type="button" data-lang="cn" aria-pressed="false">中文</button>
+        </div>
+        <button class="icon-btn" id="themeToggle" type="button" data-i18n-attr="aria-label:nav.themeAria" aria-label="Tema değiştir">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2.5v2M12 2.5v2M21.5 12h-2M4.5 12h-2M18.7 5.3l-1.4 1.4M6.7 17.3l-1.4 1.4M18.7 18.7l-1.4-1.4M6.7 6.7 5.3 5.3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+        </button>
+        <a class="btn btn-primary btn-sm nav-github" href="https://github.com/PrivyXe" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.1c-3.2.7-3.88-1.36-3.88-1.36-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.11-.75.41-1.27.74-1.56-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.26 5.69.42.36.79 1.08.79 2.18v3.23c0 .3.21.66.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z" fill="currentColor"/></svg>
+          <span data-i18n="nav.github">GitHub</span>
+        </a>
+        <button class="icon-btn nav-burger" id="navToggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="navLinks">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============================== HERO ============================== -->
+    <section class="hero" id="top">
+      <div class="hero-bg" aria-hidden="true">
+        <div class="orb orb-a"></div>
+        <div class="orb orb-b"></div>
+        <div class="grid-lines"></div>
+      </div>
+
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow reveal">
+            <span class="dot"></span> <span data-i18n="hero.badge">Android 8+ · ARM64 · bağımsız proje</span>
+          </p>
+          <h1 class="reveal" data-i18n-html="hero.title">Telefonunu bir<br /><span class="grad">web sunucusuna</span> dönüştür.</h1>
+          <p class="lead reveal" data-i18n-html="hero.lead">
+            AI ile ürettiğin siteyi ZIP olarak telefona at, tek dokunuşla yayınla.
+            <strong>Linux yok, Termux yok, root yok.</strong> Wi-Fi'deki herkes saniyeler içinde açsın;
+            istersen Cloudflare Tunnel ile HTTPS üzerinden dünyaya aç.
+          </p>
+          <div class="hero-cta reveal">
+            <a class="btn btn-primary" href="https://github.com/PrivyXe" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.1c-3.2.7-3.88-1.36-3.88-1.36-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.11-.75.41-1.27.74-1.56-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.26 5.69.42.36.79 1.08.79 2.18v3.23c0 .3.21.66.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z" fill="currentColor"/></svg>
+              <span data-i18n="hero.ctaGithub">GitHub'da keşfet</span>
+            </a>
+            <a class="btn btn-ghost" href="#ekranlar" data-i18n="hero.ctaScreens">Ekranlara bak</a>
+          </div>
+          <ul class="hero-facts reveal">
+            <li data-i18n="hero.fact1">Reklamsız</li>
+            <li data-i18n="hero.fact2">İzleme yok</li>
+            <li data-i18n="hero.fact3">%100 cihazda</li>
+            <li data-i18n="hero.fact4">Bağımsız proje</li>
+          </ul>
+        </div>
+
+        <div class="hero-visual reveal">
+          <div class="phone">
+            <div class="phone-notch" aria-hidden="true"></div>
+            <img src="assets/screenshots/dashboard.png" width="720" height="1600" alt="PocketHost dashboard" />
+          </div>
+          <span class="chip chip-a" data-i18n="hero.chip1">Go HTTP motoru</span>
+          <span class="chip chip-b" data-i18n="hero.chip2">ZIP → yayın</span>
+          <span class="chip chip-c" data-i18n="hero.chip3">Cloudflare Tunnel</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== STATS ============================== -->
+    <section class="stats container" aria-label="Stats">
+      <div class="stat reveal"><strong data-i18n="stats.s1v">1 dokunuş</strong><span data-i18n="stats.s1l">yayına alma</span></div>
+      <div class="stat reveal"><strong data-i18n="stats.s2v">13,5 MB</strong><span data-i18n="stats.s2l">uygulama boyutu</span></div>
+      <div class="stat reveal"><strong data-i18n="stats.s3v">2 katman</strong><span data-i18n="stats.s3l">LAN + Cloudflare HTTPS</span></div>
+      <div class="stat reveal"><strong data-i18n="stats.s4v">0</strong><span data-i18n="stats.s4l">reklam & izleyici</span></div>
+    </section>
+
+    <!-- ============================== FEATURES ============================== -->
+    <section class="section" id="ozellikler">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow reveal"><span class="dot"></span> <span data-i18n="features.overline">Neden PocketHost?</span></p>
+          <h2 class="reveal" data-i18n="features.heading">Cebindeki sunucu, ciddi altyapı.</h2>
+          <p class="section-lead reveal" data-i18n="features.lead">Bu bir demo veya UI prototipi değil: süreç içinde çalışan gerçek bir Go HTTP sunucusu, gerçek ZIP güvenlik kontrolleri ve gerçek ölçümler.</p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="card feature reveal">
+            <div class="ico"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="18.5" cy="18" r="2.2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></div>
+            <h3 data-i18n="f1.title">Gömülü Go motoru</h3>
+            <p data-i18n="f1.body">net/http tabanlı sunucu, gomobile ile doğrudan uygulama sürecinde çalışır. Ayrı süreç, shell veya harici binary yok; JNI köprüsü üzerinden yönetilir.</p>
+          </article>
+          <article class="card feature reveal">
+            <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3v10m0 0 3.5-3.5M12 13 8.5 9.5M5 15v3a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <h3 data-i18n="f2.title">ZIP'ten tek dokunuş</h3>
+            <p data-i18n="f2.body">Siteyi ZIP olarak seç; kök dizini otomatik bulur, güvenli biçimde çıkarır ve önizleme sunar. ZIP-Slip, symlink, zip bombası ve bozuk arşivler reddedilir.</p>
+          </article>
+          <article class="card feature reveal">
+            <div class="ico"><svg viewBox="0 0 24 24"><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/></svg></div>
+            <h3 data-i18n="f3.title">Aynı Wi-Fi'de anında</h3>
+            <p data-i18n="f3.body">Sunucu 0.0.0.0:port üzerinde dinler; panel gerçek LAN adresini gösterir. Wi-Fi'deki herhangi bir cihaz siteyi açar — internet bile gerekmez.</p>
+          </article>
+          <article class="card feature reveal">
+            <div class="ico"><svg viewBox="0 0 24 24"><path d="M7 17a4 4 0 0 1-.6-7.95A5.5 5.5 0 0 1 17 8.5a4.5 4.5 0 0 1 .5 8.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M9 20.5h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+            <h3 data-i18n="f4.title">Cloudflare Tunnel</h3>
+            <p data-i18n="f4.body">Hızlı tünel ile geçici bir *.trycloudflare.com HTTPS adresi; Named Tunnel için token yalnızca Android Keystore'da şifreli saklanır.</p>
+          </article>
+          <article class="card feature reveal">
+            <div class="ico"><svg viewBox="0 0 24 24"><path d="M4 20V10m5 10V5m5 15v-7m5 7V8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+            <h3 data-i18n="f5.title">Gerçek metrikler</h3>
+            <p data-i18n="f5.body">İstek sayısı, aktif bağlantı, yanıt dağılımı, gecikme (p50/p95), RAM/ısı/trafik… Cihazın vermediği değer "kullanılamıyor" yazar — asla uydurulmaz.</p>
+          </article>
+          <article class="card feature reveal">
+            <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v6c0 4.2 2.9 7.6 7 9 4.1-1.4 7-4.8 7-9V6l-7-3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m9.5 12 1.8 1.8L15 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <h3 data-i18n="f6.title">Gizlilik odaklı</h3>
+            <p data-i18n="f6.body">Sadece uygulamaya özel depolama; geniş depolama izni yok. Yönetim yüzeyi HTTP'ye açılmaz. Dosya erişimi her site köküne os.Root ile hapsedilir.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== HOW ============================== -->
+    <section class="section how" id="nasil">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow reveal"><span class="dot"></span> <span data-i18n="how.overline">Üç adım</span></p>
+          <h2 class="reveal" data-i18n="how.heading">ZIP'ten yayına, üç adımda.</h2>
+        </div>
+        <ol class="steps">
+          <li class="card step reveal">
+            <span class="step-no">01</span>
+            <h3 data-i18n="how.s1.title">Kur</h3>
+            <p data-i18n="how.s1.body">ARM64 Android 8.0+ bir telefon yeter. Uygulamayı GitHub üzerinden edin, bildirim iznini onayla.</p>
+          </li>
+          <li class="card step reveal">
+            <span class="step-no">02</span>
+            <h3 data-i18n="how.s2.title">Siteyi içe aktar</h3>
+            <p data-i18n="how.s2.body">AI aracından indirdiğin ZIP'i İçe Aktar ile seç. PocketHost kök dizini bulur, dosyaları doğrular ve özet çıkarır.</p>
+          </li>
+          <li class="card step reveal">
+            <span class="step-no">03</span>
+            <h3 data-i18n="how.s3.title">Yayına al</h3>
+            <p data-i18n="how.s3.body">BAŞLAT'a bas. Yerel URL hazır. İstersen Cloudflare Tunnel'ı bağlayıp HTTPS'le dünyaya aç.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============================== SCREENS ============================== -->
+    <section class="section" id="ekranlar">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow reveal"><span class="dot"></span> <span data-i18n="screens.overline">Uygulama içinden</span></p>
+          <h2 class="reveal" data-i18n="screens.heading">Panel, siteler, tünel.</h2>
+          <p class="section-lead reveal" data-i18n="screens.lead">Gerçek ekran görüntüleri — koyu ve açık tema desteklenir.</p>
+        </div>
+
+        <div class="gallery">
+          <figure class="shot reveal">
+            <button class="shot-btn" type="button" data-full="assets/screenshots/dashboard.png" aria-label="Dashboard">
+              <img src="assets/screenshots/dashboard.png" width="720" height="1600" loading="lazy" alt="Dashboard" />
+            </button>
+            <figcaption><strong data-i18n="g1.title">Panel</strong><span data-i18n="g1.sub">Sunucu durumu, yerel URL, site özeti</span></figcaption>
+          </figure>
+          <figure class="shot reveal">
+            <button class="shot-btn" type="button" data-full="assets/screenshots/metrics.png" aria-label="Metrics">
+              <img src="assets/screenshots/metrics.png" width="720" height="1600" loading="lazy" alt="Metrics" />
+            </button>
+            <figcaption><strong data-i18n="g2.title">Metrikler</strong><span data-i18n="g2.sub">İstekler, gecikme, yanıt kodları</span></figcaption>
+          </figure>
+          <figure class="shot reveal">
+            <button class="shot-btn" type="button" data-full="assets/screenshots/sites.png" aria-label="Sites">
+              <img src="assets/screenshots/sites.png" width="720" height="1600" loading="lazy" alt="Sites" />
+            </button>
+            <figcaption><strong data-i18n="g3.title">Siteler</strong><span data-i18n="g3.sub">Depolama, dosya sayısı, index durumu</span></figcaption>
+          </figure>
+          <figure class="shot reveal">
+            <button class="shot-btn" type="button" data-full="assets/screenshots/tunnel.png" aria-label="Tunnel">
+              <img src="assets/screenshots/tunnel.png" width="720" height="1600" loading="lazy" alt="Tunnel" />
+            </button>
+            <figcaption><strong data-i18n="g4.title">Tünel</strong><span data-i18n="g4.sub">Hızlı tünel & Named Tunnel</span></figcaption>
+          </figure>
+          <figure class="shot reveal">
+            <button class="shot-btn" type="button" data-full="assets/screenshots/settings.png" aria-label="Settings">
+              <img src="assets/screenshots/settings.png" width="720" height="1600" loading="lazy" alt="Settings" />
+            </button>
+            <figcaption><strong data-i18n="g5.title">Ayarlar</strong><span data-i18n="g5.sub">Port, bağlama modu, tema</span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== SPECS ============================== -->
+    <section class="section" id="teknik">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow reveal"><span class="dot"></span> <span data-i18n="specs.overline">Teknik künye</span></p>
+          <h2 class="reveal" data-i18n="specs.heading">Meraklısına ayrıntılar.</h2>
+        </div>
+        <div class="specs card reveal">
+          <dl>
+            <div><dt data-i18n="spec.platform">Platform</dt><dd data-i18n="spec.platformV">Android 8.0+ (API 26) · hedef SDK 36</dd></div>
+            <div><dt data-i18n="spec.abi">Mimari</dt><dd data-i18n="spec.abiV">arm64-v8a</dd></div>
+            <div><dt data-i18n="spec.engine">Sunucu motoru</dt><dd data-i18n="spec.engineV">Go net/http · gomobile ile süreç içinde</dd></div>
+            <div><dt data-i18n="spec.tunnel">Tünel</dt><dd data-i18n="spec.tunnelV">cloudflared 2026.10.7 · 1.1.1.1/8.8.8.8 DNS yaması · 16 KB uyumlu</dd></div>
+            <div><dt data-i18n="spec.data">Veri</dt><dd data-i18n="spec.dataV">Yalnızca uygulamaya özel depolama + Room/SQLite</dd></div>
+            <div><dt data-i18n="spec.security">Güvenlik</dt><dd data-i18n="spec.securityV">Keystore AES-256-GCM · os.Root hapsi · JNI-only yönetim</dd></div>
+            <div><dt data-i18n="spec.perms">İzinler</dt><dd data-i18n="spec.permsV">İnternet, ağ durumu, foreground service, bildirim, wake lock</dd></div>
+            <div><dt data-i18n="spec.price">Ücret</dt><dd data-i18n="spec.priceV">Yerel barındırma ücretsiz · reklam ve izleme yok</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================== LINKS / SOCIAL ============================== -->
+    <section class="section links" id="baglantilar">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow reveal"><span class="dot"></span> <span data-i18n="links.overline">Takip et</span></p>
+          <h2 class="reveal" data-i18n="links.heading">Geliştiriciyi takip et.</h2>
+          <p class="section-lead reveal" data-i18n="links.lead">Yeni sürümler, duyurular ve iletişim için:</p>
+        </div>
+
+        <div class="links-grid">
+          <a class="card social reveal" href="https://x.com/PrivyXe" target="_blank" rel="noopener noreferrer">
+            <span class="social-ico">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 3h3.1l-6.8 7.8L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L2 3h6.3l4.4 5.8L17.5 3Zm-1.1 16.1h1.7L7.3 4.8H5.5l10.9 14.3Z" fill="currentColor"/></svg>
+            </span>
+            <span class="social-copy">
+              <strong data-i18n="links.x">X (Twitter)</strong>
+              <span data-i18n="links.xSub">@PrivyXe · duyurular ve güncellemeler</span>
+            </span>
+            <svg class="social-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+
+          <a class="card social reveal" href="https://github.com/PrivyXe" target="_blank" rel="noopener noreferrer">
+            <span class="social-ico">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.1c-3.2.7-3.88-1.36-3.88-1.36-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.11-.75.41-1.27.74-1.56-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.26 5.69.42.36.79 1.08.79 2.18v3.23c0 .3.21.66.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z" fill="currentColor"/></svg>
+            </span>
+            <span class="social-copy">
+              <strong data-i18n="links.gh">GitHub</strong>
+              <span data-i18n="links.ghSub">PrivyXe · kaynak kod ve sürümler</span>
+            </span>
+            <svg class="social-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+
+          <a class="card social reveal" href="https://www.instagram.com/mr_cimen_" target="_blank" rel="noopener noreferrer">
+            <span class="social-ico">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Zm4.75-3a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z" fill="currentColor"/></svg>
+            </span>
+            <span class="social-copy">
+              <strong data-i18n="links.ig">Instagram</strong>
+              <span data-i18n="links.igSub">@mr_cimen_ · perde arkası</span>
+            </span>
+            <svg class="social-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+
+        <p class="links-note reveal" data-i18n="links.note">PocketHost bağımsız bir projedir. APK dağıtımı bu sayfada yapılmaz; yeni sürümler GitHub üzerinden duyurulur.</p>
+      </div>
+    </section>
+
+    <!-- ============================== FAQ ============================== -->
+    <section class="section" id="sss">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow reveal"><span class="dot"></span> <span data-i18n="faq.overline">Sık sorulanlar</span></p>
+          <h2 class="reveal" data-i18n="faq.heading">Aklına takılanlar.</h2>
+        </div>
+        <div class="faq">
+          <details class="card reveal">
+            <summary data-i18n="q1.q">Root veya Termux gerekiyor mu?</summary>
+            <p data-i18n="q1.a">Hayır. PocketHost sıradan, rootlanmamış bir Android telefon için tasarlandı. Linux, Termux, SSH veya sunucu bilgisi gerekmez.</p>
+          </details>
+          <details class="card reveal">
+            <summary data-i18n="q2.q">Ücretsiz mi? İleride ücretli olacak mı?</summary>
+            <p data-i18n="q2.a">Bu sürümde yerel barındırma tamamen ücretsiz ve reklamsız. Gelecekte isteğe bağlı "yönetilen tünel / özel alan adı" gibi eklentiler ücretli olabilir; çekirdek işlev ücretsiz kalacak şekilde tasarlanıyor.</p>
+          </details>
+          <details class="card reveal">
+            <summary data-i18n="q3.q">Sitem internete açık olacak mı?</summary>
+            <p data-i18n="q3.a">Varsayılan olarak yalnızca aynı Wi-Fi ağındaki cihazlar erişir. Dünyaya açmak için Cloudflare Tunnel'ı açıkça bağlarsın — uygulama herkese açmadan önce onay ister.</p>
+          </details>
+          <details class="card reveal">
+            <summary data-i18n="q4.q">Hangi siteler destekleniyor?</summary>
+            <p data-i18n="q4.a">Statik siteler: HTML, CSS, JavaScript, resimler, fontlar. PHP, MySQL, Node.js veya Docker desteklenmez — PocketHost'un amacı statik site barındırmaktır.</p>
+          </details>
+          <details class="card reveal">
+            <summary data-i18n="q5.q">Cloudflare Tunnel ücretli mi?</summary>
+            <p data-i18n="q5.a">Hızlı tünel (geçici *.trycloudflare.com) Cloudflare hesabı gerektirmez. Kalıcı (Named) tünel için Cloudflare hesabı ve tünel tokenı gerekir; token cihazda şifreli saklanır.</p>
+          </details>
+          <details class="card reveal">
+            <summary data-i18n="q6.q">iPhone'da çalışır mı?</summary>
+            <p data-i18n="q6.a">Hayır, PocketHost Android'e özgüdür (Android 8.0+ / ARM64). iOS'ta arka planda sürekli sunucu çalıştırmak platform kuralları gereği mümkün değildir.</p>
+          </details>
+          <details class="card reveal">
+            <summary data-i18n="q7.q">Pil dostu mu?</summary>
+            <p data-i18n="q7.a">Sunucu çalışırken kısmi wake lock ve Wi-Fi kilidi alınır; sunucu durunca arka plan yoklaması da durur. Ölçülen boşta bellek ~100 MB seviyesindedir.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="assets/logo.svg" alt="" width="30" height="30" />
+        <span>PocketHost</span>
+      </div>
+      <p class="footer-note" data-i18n-html="footer.note">
+        Telefonunda üretildi, telefonunda yayınlandı. 🙂<br />
+        Bu sayfa PocketHost tarafından barındırılabilen sıradan bir statik sitedir.
+      </p>
+      <div class="footer-social">
+        <a href="https://x.com/PrivyXe" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 3h3.1l-6.8 7.8L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L2 3h6.3l4.4 5.8L17.5 3Zm-1.1 16.1h1.7L7.3 4.8H5.5l10.9 14.3Z" fill="currentColor"/></svg>
+        </a>
+        <a href="https://github.com/PrivyXe" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.1c-3.2.7-3.88-1.36-3.88-1.36-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.11-.75.41-1.27.74-1.56-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.26 5.69.42.36.79 1.08.79 2.18v3.23c0 .3.21.66.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z" fill="currentColor"/></svg>
+        </a>
+        <a href="https://www.instagram.com/mr_cimen_" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Zm0 2a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Zm4.75-3a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z" fill="currentColor"/></svg>
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="#ozellikler" data-i18n="nav.features">Özellikler</a>
+        <a href="#teknik" data-i18n="nav.specs">Teknik</a>
+        <a href="#baglantilar" data-i18n="nav.links">Bağlantılar</a>
+        <a href="#top" data-i18n="footer.top">Yukarı</a>
+      </div>
+    </div>
+    <div class="container footer-credit">
+      <span data-i18n="footer.credit">Geliştirici: @mr_cimen_ · PocketHost bağımsız bir projedir.</span>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Screenshot" hidden>
+    <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close">×</button>
+    <img id="lightboxImg" src="" alt="" />
+  </div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>

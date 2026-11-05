@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="sites/pockethost-website/assets/logo.svg" width="88" alt="PocketHost logo" />
+<img src="assets/logo.svg" width="88" alt="PocketHost logo" />
 
 # PocketHost
 
@@ -30,11 +30,26 @@ site is live on Wi-Fi. Optionally expose it to the world over HTTPS with Cloudfl
   <a href="https://www.instagram.com/mr_cimen_"><img alt="Instagram" src="https://img.shields.io/badge/-@mr__cimen__-E4405F?style=flat-square&logo=instagram&logoColor=white" /></a>
 </p>
 
-<img src="docs/phases/screenshots/dashboard-hosting-light.png" width="290" alt="PocketHost dashboard while hosting" />
+<img src="assets/screenshots/dashboard.png" width="290" alt="PocketHost dashboard while hosting" />
+
+**🌐 Live site: [privyxe.github.io/PocketHost](https://privyxe.github.io/PocketHost/)** · **⬇️ Download: [latest release](../../releases/latest)**
 
 </div>
 
 ---
+
+## Download
+
+Get the signed APK from **[Releases](../../releases/latest)**:
+
+| File | Details |
+|---|---|
+| `PocketHost-1.0.2-arm64.apk` | 13.49 MB · `arm64-v8a` only · Android 8.0+ · signed v2+v3 |
+| `PocketHost-1.0.2-arm64.apk.sha256` | SHA-256 checksum — verify before installing |
+| `PocketHost-1.0.2.json` | machine-readable build manifest (versionCode 3) |
+
+> **Sideload only.** PocketHost is not on Google Play. No account, no ads, no analytics.
+> Install: open the APK on an **ARM64** Android 8.0+ phone → allow "install unknown apps" → install.
 
 ## Table of contents
 
@@ -47,20 +62,14 @@ site is live on Wi-Fi. Optionally expose it to the world over HTTPS with Cloudfl
 - [Architecture](#architecture)
 - [Security model](#security-model)
 - [Requirements](#requirements)
-- [Quick start](#quick-start)
-  - [Install the APK](#1-install-the-apk)
-  - [Host a site](#2-host-a-site)
-  - [Build from source](#3-build-from-source)
+- [Install & first site](#install--first-site)
 - [Using the app](#using-the-app)
-- [Testing](#testing)
-- [Project layout](#project-layout)
+- [Quality & verification](#quality--verification)
+- [Repository contents](#repository-contents)
 - [Known limitations](#known-limitations)
 - [FAQ](#faq)
 - [Troubleshooting](#troubleshooting)
-- [Marketing site](#marketing-site)
 - [Roadmap](#roadmap)
-- [Docs](#docs)
-- [Contributing](#contributing)
 - [Developer](#developer)
 - [🇹🇷 Türkçe özet](#-türkçe-özet)
 - [License](#license)
@@ -108,21 +117,18 @@ backends. It is a pocket-sized static-site host for demos, prototypes, portfolio
 | **Tunnel** | bundled `cloudflared` 2026.10.7 (pinned source, patched DNS resolver); Quick Tunnel verified externally, Named Tunnel requires user token |
 | **License** | [MIT](LICENSE) |
 
-> **Sideload only.** PocketHost is not on Google Play. The APK is published through
-> [GitHub Releases](../../releases/latest) so it stays ad-free and account-free.
-
 ## Screens
 
 <table>
   <tr>
-    <td align="center"><img src="docs/phases/screenshots/dashboard-hosting-light.png" width="230" /><br /><sub><b>Dashboard</b><br />server status, LAN URL, site summary</sub></td>
-    <td align="center"><img src="docs/phases/screenshots/dashboard-metrics-server-light.png" width="230" /><br /><sub><b>Metrics</b><br />requests, latency, response codes</sub></td>
-    <td align="center"><img src="docs/phases/screenshots/sites-list-light.png" width="230" /><br /><sub><b>Sites</b><br />storage, files, index detection</sub></td>
+    <td align="center"><img src="assets/screenshots/dashboard.png" width="230" /><br /><sub><b>Dashboard</b><br />server status, LAN URL, site summary</sub></td>
+    <td align="center"><img src="assets/screenshots/metrics.png" width="230" /><br /><sub><b>Metrics</b><br />requests, latency, response codes</sub></td>
+    <td align="center"><img src="assets/screenshots/sites.png" width="230" /><br /><sub><b>Sites</b><br />storage, files, index detection</sub></td>
   </tr>
   <tr>
-    <td align="center"><img src="docs/phases/screenshots/tunnel-dark.png" width="230" /><br /><sub><b>Tunnel</b><br />Quick &amp; Named Cloudflare Tunnel</sub></td>
-    <td align="center"><img src="docs/phases/screenshots/settings-developer-light.png" width="230" /><br /><sub><b>Settings</b><br />port, bind mode, developer links</sub></td>
-    <td align="center"><img src="docs/phases/screenshots/release-1.0.1-light.png" width="230" /><br /><sub><b>Signed release</b><br />minified 1.0.x build running</sub></td>
+    <td align="center"><img src="assets/screenshots/tunnel.png" width="230" /><br /><sub><b>Tunnel</b><br />Quick &amp; Named Cloudflare Tunnel</sub></td>
+    <td align="center"><img src="assets/screenshots/settings.png" width="230" /><br /><sub><b>Settings</b><br />port, bind mode, developer links</sub></td>
+    <td align="center"><img src="assets/screenshots/release.png" width="230" /><br /><sub><b>Signed release</b><br />minified 1.0.x build running</sub></td>
   </tr>
 </table>
 
@@ -151,7 +157,6 @@ backends. It is a pocket-sized static-site host for demos, prototypes, portfolio
 - Latency percentiles are computed from a single sorted sample set, so `p50 ≤ p95 ≤ max` always.
 - CPU % is shown as *Unavailable* on devices where SELinux denies `/proc/stat` to apps — because
   that is the truth, and PocketHost does not fabricate numbers.
-- Reset metrics with one tap; no persistence of request data beyond the ring buffer.
 
 ### Tunnel
 - Optional **Quick Tunnel** → temporary `https://*.trycloudflare.com` URL (no Cloudflare account).
@@ -159,7 +164,6 @@ backends. It is a pocket-sized static-site host for demos, prototypes, portfolio
   Keystore AES-256-GCM and never written to logs or passed on the command line (env-only).
 - Bundled `cloudflared` is built from pinned source with a small Android DNS patch
   (`net.DefaultResolver` → `1.1.1.1` / `8.8.8.8`), so no `--edge` hacks are needed.
-- Clear state machine: disconnected → connecting → connected / error, with the real log tail.
 
 ### Privacy & security
 - No accounts, no ads, no analytics, no telemetry, no crash reporting.
@@ -174,7 +178,7 @@ backends. It is a pocket-sized static-site host for demos, prototypes, portfolio
 ZIP / HTML / folder
         │
         ▼
-  SAF import ──► validate ──► extract to app-private storage ──► Room metadata
+  SAF import ──► validate ──► extract to app-private storage ──► site metadata
                                                                     │
                                                                     ▼
                                                         START HOSTING (tap)
@@ -223,11 +227,6 @@ flowchart LR
 | Storage | Room + app-private files | no broad storage permissions |
 | Secrets | Android Keystore AES-256-GCM | tunnel tokens never stored in plain text |
 | Tunnel | pinned `cloudflared` built for Android | real Cloudflare connectivity, reproducible build |
-| Release | R8 + resource shrinking, v2+v3 signing | small APK, verifiable signature |
-
-Details: **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** ·
-Interface contract: **[docs/architecture/integration-contract.md](docs/architecture/integration-contract.md)** ·
-Feasibility notes: **[docs/research/feasibility-notes.md](docs/research/feasibility-notes.md)**
 
 ## Security model
 
@@ -242,64 +241,22 @@ Feasibility notes: **[docs/research/feasibility-notes.md](docs/research/feasibil
 | WebView-based site preview escape | loopback-only URL, JS disabled bridge, no file access |
 | Unwanted internet exposure | LAN bind by default; public exposure requires explicit tunnel consent |
 
-The full audit-style evidence is in **[docs/phases/phase-2.md](docs/phases/phase-2.md)** and
-**[docs/KNOWN-LIMITATIONS.md](docs/KNOWN-LIMITATIONS.md)**.
-
 ## Requirements
 
-### To run
 - Android **8.0+** (API 26), **ARM64** device, 4 GB RAM or more recommended.
 - Optional: a Cloudflare account + tunnel token for a persistent public hostname.
 - Local hosting needs no internet and no account.
 
-### To build
-| Tool | Version |
-|---|---|
-| JDK | 21 (Temurin 21 recommended) |
-| Android SDK | platform **36**, build-tools **36.1.0**, platform-tools |
-| NDK | **26.1.10909125** |
-| Go | **1.27** + `golang.org/x/mobile` (`gomobile`) |
-| Gradle | 8.13 (wrapper — always use `./gradlew` / `tools/gradle.ps1`) |
+## Install & first site
 
-Exact setup and troubleshooting: **[docs/BUILD.md](docs/BUILD.md)**.
-
-## Quick start
-
-### 1. Install the APK
-
-1. Grab `PocketHost-1.0.2-arm64.apk` from **[Releases](../../releases/latest)** and verify the
-   SHA-256 published next to it.
-2. Open it on an **ARM64** Android 8.0+ phone, allow "install unknown apps", install.
-3. Launch PocketHost and allow notifications (required for background hosting).
-
-### 2. Host a site
-
-1. Export your site as a `.zip` with `index.html` at the root (or inside one folder).
-2. Tap **IMPORT WEBSITE**, pick the ZIP, review the summary, confirm.
-3. Tap **START HOSTING** — the dashboard shows `http://<phone-ip>:8080/`.
-4. Open that URL from any device on the same Wi-Fi.
-5. Optional: **CONNECT CLOUDFLARE → Quick Tunnel** for a public HTTPS URL.
-
-### 3. Build from source
-
-```powershell
-# Windows / PowerShell (scripts live in tools/)
-. .\tools\env.ps1                            # exports JAVA_HOME, ANDROID_HOME, NDK, Go/Gradle caches
-cd engine ; .\build-aar.ps1 ; cd ..          # Go engine → android/app/libs/engine.aar
-cd tunnel ; .\build-cloudflared.ps1 ; cd ..  # optional: bundled cloudflared for tunnelling
-.\tools\package-release.ps1                  # build + verify + write dist/ (APK, SHA-256, manifest)
-adb install -r dist\PocketHost-1.0.2-arm64.apk
-```
-
-Debug build (runs on the emulator too, both ABIs):
-
-```powershell
-.\tools\gradle.ps1 :app:assembleDebug
-```
-
-> The Go AAR and `libcloudflared.so` are **generated** and git-ignored — build them before the
-> Android app. `tools/package-release.ps1` verifies the signature, ABI list, 16 KB page alignment
-> and writes the release manifest.
+1. Download `PocketHost-1.0.2-arm64.apk` from **[Releases](../../releases/latest)**; optionally
+   verify the published SHA-256.
+2. Open it on the phone → allow "install unknown apps" → install → launch.
+3. Allow notifications (required for background hosting).
+4. Export your website as a `.zip` with `index.html` at the root (or inside one folder).
+5. **IMPORT WEBSITE** → pick the ZIP → review the summary → confirm.
+6. **START HOSTING** → open `http://<phone-ip>:8080/` from any device on the same Wi-Fi.
+7. Optional: **CONNECT CLOUDFLARE → Quick Tunnel** for a public HTTPS URL.
 
 ## Using the app
 
@@ -314,49 +271,42 @@ Debug build (runs on the emulator too, both ABIs):
 
 The ongoing notification keeps hosting alive in the background and offers a **STOP** action.
 
-## Testing
+## Quality & verification
 
-```powershell
-cd engine ; go vet ./... ; go test ./... -count=1 ; cd ..   # 5 packages, 0 failures
-.\tools\gradle.ps1 :app:testDebugUnitTest --continue        # 140 JVM tests / 16 suites
-.\tools\gradle.ps1 :app:connectedDebugAndroidTest           # instrumented E2E (real HTTP)
-```
+- **140 JVM unit tests** across 16 suites (ZIP security, root detection, engine protocol, log
+  redaction, settings, tunnel parsing, metrics maths).
+- **72 top-level Go tests** across 5 packages (routing, default/secondary sites, `304`/`HEAD`/`405`,
+  traversal reject, ZIP validation + CRC, percentiles `p50 ≤ p95 ≤ max`, command bus).
+- **Instrumented end-to-end run** on the API 36 emulator: real ZIP import → real Go engine → real
+  HTTP (`200`/`304`/`HEAD`/`404`/`405`/traversal-reject/secondary site) → clean stop; STOP→START
+  regression; notification STOP while backgrounded.
+- Quick Tunnel connected and verified **from an external host** (`curl` → HTTP 200 through
+  Cloudflare).
 
-| Suite | Covers |
-|---|---|
-| Go: `engine/internal/server` | routing, default/secondary sites, `304`/`HEAD`/`405`, traversal reject |
-| Go: `engine/internal/sites` | ZIP import validation, CRC, root detection, `os.Root` confinement |
-| Go: `engine/internal/metrics` | ring buffer, percentiles (`p50 ≤ p95 ≤ max`), reset |
-| Go: `engine/internal/api` | command bus, envelope validation, error mapping |
-| Go: `engine/bridge` | gomobile surface + JSON protocol |
-| Android JVM | ZIP security, root detection, engine protocol, redaction, settings, tunnel parsing, CPU maths |
-| Instrumented | real import → start → HTTP round-trip → secondary site → clean stop; STOP→START regression |
+## Repository contents
 
-Every phase has recorded commands, outputs and PASS/FAIL/NOT-RUN tables in
-**[docs/phases/](docs/phases/)**.
-
-## Project layout
+This public repository is a **release & marketing repo** — it intentionally does **not** contain the
+application source code:
 
 ```
-android/   Kotlin app — Compose UI, foreground service, Room, SAF import, metrics, tunnel
-engine/    Go hosting engine (stdlib net/http), gomobile bridge, unit + HTTP tests
-tunnel/    pinned cloudflared build scripts, Android DNS patch + evidence
-tools/     env/gradle/emulator/verify/package scripts (PowerShell)
-sites/     trilingual marketing site + importable ZIP
-docs/      architecture, build, known limitations, phase-by-phase evidence
-dist/      signed release APK + SHA-256 + machine-readable manifest
+index.html, css/, js/, assets/    ← the trilingual marketing site (GitHub Pages)
+assets/screenshots/               ← real app screenshots used in this README
+README.md                         ← this document
+LICENSE                           ← MIT
+CHANGELOG.md                      ← version history
 ```
+
+The APK and its checksum are attached to **[Releases](../../releases/latest)**, not committed to
+the repository. The Android/Go source tree is maintained privately.
 
 ## Known limitations
-
-Kept explicit on purpose — see **[docs/KNOWN-LIMITATIONS.md](docs/KNOWN-LIMITATIONS.md)**:
 
 - `arm64-v8a` payload has **not yet been executed on physical hardware** (emulator evidence only).
 - Named Tunnel is implemented and unit-tested but **not yet verified end-to-end** with a real
   Cloudflare account token (Quick Tunnel *is* verified externally).
 - Longest continuous soak so far is a short measured session, not 24 h.
 - Absolute-path assets on **secondary** `/s/<id>/` sites need relative paths (or the Referer
-  fallback) — the default site at `/` is unaffected.
+  fallback added in 1.0.1) — the default site at `/` is unaffected.
 - Static sites only: no PHP, MySQL, Node.js or Docker.
 - Android 17 local-network permission is not yet handled (OS not released at build time).
 
@@ -398,13 +348,6 @@ Android-only (8.0+ / ARM64).
 </details>
 
 <details>
-<summary><b>Is it battery friendly?</b></summary>
-
-A partial wake lock and Wi-Fi lock are held only while hosting; when the server stops, background
-polling stops too. Measured idle memory is around 100 MB.
-</details>
-
-<details>
 <summary><b>Can I use a custom domain?</b></summary>
 
 With a Cloudflare Named Tunnel you can attach any domain you manage in Cloudflare. A built-in
@@ -415,23 +358,11 @@ domain setup wizard is on the roadmap.
 
 | Symptom | Check |
 |---|---|
-| `INSTALL_FAILED_NO_MATCHING_ABIS` | the release APK is `arm64-v8a` only — use an ARM64 phone (debug build also has x86_64) |
+| `INSTALL_FAILED_NO_MATCHING_ABIS` | the release APK is `arm64-v8a` only — use an ARM64 phone |
 | Site loads locally but tunnel URL doesn't | confirm the tunnel state is `connected`, then open the log tail for Cloudflare errors |
 | CPU gauge says *Unavailable* | expected on devices where SELinux denies `/proc/stat` to apps — not a bug |
 | Import rejected | the ZIP is validated strictly; check for symlinks, duplicate names or CRC errors |
 | Secondary site broken assets | use relative paths, or rely on the Referer fallback added in 1.0.1 |
-| Build fails at `gomobile bind` | NDK 26 + `-androidapi 26` required; see [docs/BUILD.md](docs/BUILD.md) |
-
-## Marketing site
-
-A standalone, dependency-free, **trilingual (TR / EN / 中文)** landing page lives in
-[`sites/pockethost-website/`](sites/pockethost-website/) and can itself be hosted by PocketHost:
-
-- Ready-to-import ZIP: [`sites/PocketHost-Website.zip`](sites/PocketHost-Website.zip)
-- No APK download on the page (by design); links go to **[GitHub](https://github.com/PrivyXe)**,
-  **[X](https://x.com/PrivyXe)** and **[Instagram](https://www.instagram.com/mr_cimen_)**.
-- Preview renders: [`sites/preview/`](sites/preview/)
-- Import instructions: [`sites/README.md`](sites/README.md)
 
 ## Roadmap
 
@@ -440,29 +371,6 @@ A standalone, dependency-free, **trilingual (TR / EN / 中文)** landing page li
 - [ ] 24-hour soak with power/thermal measurements on real hardware
 - [ ] Optional custom domain helper and richer tunnel diagnostics
 - [ ] Play Store build (`specialUse` justification + privacy policy) once device coverage is done
-
-## Docs
-
-| Document | Content |
-|---|---|
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | system design, module boundaries, decisions |
-| [docs/BUILD.md](docs/BUILD.md) | exact toolchain versions and build steps |
-| [docs/KNOWN-LIMITATIONS.md](docs/KNOWN-LIMITATIONS.md) | honest limitation list + verification scope |
-| [docs/phases/](docs/phases/) | phase-by-phase evidence: PASS / FAIL / NOT-RUN tables |
-| [CHANGELOG.md](CHANGELOG.md) | version history (1.0.1 fixes, 1.0.2 Developer section) |
-| [LICENSE](LICENSE) | MIT |
-
-## Contributing
-
-Contributions are welcome, especially device reports and testing on real hardware.
-
-1. Open an issue describing the change or the device/OS where something failed.
-2. Keep PRs focused: UI, engine and tunnel changes are separate areas with disjoint ownership.
-3. Run the test suites above before opening a PR.
-4. By contributing you agree that your changes are licensed under the [MIT License](LICENSE).
-
-**Device report template:** phone model · Android version · app version · what you did ·
-expected vs actual · screenshot/logcat if possible.
 
 ## Developer
 
@@ -475,7 +383,7 @@ Built and maintained by **[@mr_cimen_](https://github.com/PrivyXe)**.
 </p>
 
 If PocketHost runs (or fails) on your phone, tell me the model, Android version and what happened —
-real-device coverage is the most valuable contribution right now.
+real-device coverage is the most valuable feedback right now.
 
 ## 🇹🇷 Türkçe özet
 
@@ -487,11 +395,8 @@ açılır. İstersen Cloudflare Tunnel ile HTTPS üzerinden dünyaya aç.
 - Motor, uygulama sürecinde çalışan **Go `net/http`** sunucusudur (JNI köprüsü, harici süreç yok).
 - Metrikler gerçektir; cihazın vermediği değer "kullanılamıyor" olarak gösterilir.
 - Kurulum: [Releases](../../releases/latest) → `PocketHost-*-arm64.apk` → kur → ZIP'i içe aktar → BAŞLAT.
-- Lisans: **MIT** — kaynak kodu serbestçe kullanabilir, değiştirebilir ve paylaşabilirsin.
-
-Ayrıntılar: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), [docs/BUILD.md](docs/BUILD.md),
-[docs/KNOWN-LIMITATIONS.md](docs/KNOWN-LIMITATIONS.md), [CHANGELOG.md](CHANGELOG.md).
-Geliştirici: [@mr_cimen_](https://www.instagram.com/mr_cimen_).
+- Site (TR/EN/中文): [privyxe.github.io/PocketHost](https://privyxe.github.io/PocketHost/)
+- Lisans: **MIT**.
 
 ## License
 
@@ -501,14 +406,9 @@ This project is licensed under the **MIT License** — see **[LICENSE](LICENSE)*
 MIT License · Copyright (c) 2026 PrivyXe
 ```
 
-Third-party components keep their own licenses:
-
-| Component | License |
-|---|---|
-| AndroidX / Jetpack Compose | Apache-2.0 |
-| Kotlin | Apache-2.0 |
-| Go standard library | BSD-3-Clause |
-| [cloudflared](https://github.com/cloudflare/cloudflared) | Apache-2.0 |
+Third-party components keep their own licenses: AndroidX / Jetpack Compose (Apache-2.0), Kotlin
+(Apache-2.0), Go standard library (BSD-3-Clause),
+[cloudflared](https://github.com/cloudflare/cloudflared) (Apache-2.0).
 
 PocketHost is an independent project. It is **not affiliated with Google, Android, or Cloudflare**;
 Cloudflare Tunnel is an optional third-party service and is subject to Cloudflare's terms.
