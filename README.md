@@ -255,7 +255,42 @@ flowchart LR
 4. Export your website as a `.zip` with `index.html` at the root (or inside one folder).
 5. **IMPORT WEBSITE** → pick the ZIP → review the summary → confirm.
 6. **START HOSTING** → open `http://<phone-ip>:8080/` from any device on the same Wi-Fi.
-7. Optional: **CONNECT CLOUDFLARE → Quick Tunnel** for a public HTTPS URL.
+### Optional: a custom domain with Cloudflare Tunnel
+
+A Quick Tunnel gives you a temporary `*.trycloudflare.com` URL and needs no account. For a
+**persistent domain of your own**, use a Cloudflare Named Tunnel:
+
+1. **Put the domain on Cloudflare first.**
+   - Cloudflare dashboard → **Add a site** → your domain → free plan.
+   - At your registrar, replace the nameservers with the two Cloudflare nameservers shown.
+   - Wait until the zone is **Active**. Tunnel hostnames will not resolve before that.
+
+2. **Create the tunnel and copy its token.**
+   - Cloudflare dashboard → **Networking → Tunnels** (Zero Trust) → **Create a tunnel**.
+   - Connector: **cloudflared** → name it, e.g. `pockethost-phone` → **Save tunnel**.
+   - On the install screen copy the token from `cloudflared service install eyJ...` — the long
+     `eyJ...` string is the token.
+
+3. **Connect PocketHost to the tunnel.**
+   - In the app: import a site and **START HOSTING** first.
+   - **Tunnel → Named Tunnel** → paste the token → **SAVE** → **CONNECT**.
+   - Wait for the state to become **CONNECTED**.
+
+4. **Route the domain to the phone.**
+   - Back in Cloudflare → **Networking → Tunnels** → click the tunnel's name.
+   - Open the **Routes** tab (in some dashboard versions: **Public Hostname**) → **Add route**:
+     - **subdomain:** leave empty for the apex domain (`yourdomain.com`) or enter `www`
+     - **domain:** your domain
+     - **service type:** **HTTP**
+     - **URL:** `http://localhost:8080` — must match **Settings → Port** in the app (8080 is the
+       default)
+   - Save. Cloudflare creates the DNS record automatically.
+
+5. Open `https://yourdomain.com`. Cloudflare terminates TLS and the tunnel forwards plain HTTP to
+   your phone. If hosting is stopped or the phone is offline, the domain answers **502**.
+
+> Use `http://` for the origin URL, not `https://`: the Go server on the phone speaks plain HTTP,
+> and TLS is handled by Cloudflare's edge.
 
 ## Using the app
 
@@ -360,6 +395,8 @@ domain setup wizard is on the roadmap.
 |---|---|
 | `INSTALL_FAILED_NO_MATCHING_ABIS` | the release APK is `arm64-v8a` only — use an ARM64 phone |
 | Site loads locally but tunnel URL doesn't | confirm the tunnel state is `connected`, then open the log tail for Cloudflare errors |
+| `502 Bad Gateway` on your own domain | hosting must be running; tunnel `connected`; route URL must be `http://localhost:8080` matching **Settings → Port**; the Cloudflare zone must be **Active** |
+| Your domain does not resolve | its nameservers must point to Cloudflare and the zone must be **Active** (propagation can take a few hours); only then will tunnel hostnames work |
 | CPU gauge says *Unavailable* | expected on devices where SELinux denies `/proc/stat` to apps — not a bug |
 | Import rejected | the ZIP is validated strictly; check for symlinks, duplicate names or CRC errors |
 | Secondary site broken assets | use relative paths, or rely on the Referer fallback added in 1.0.1 |
