@@ -70,7 +70,6 @@ Get the signed APK from **[Releases](../../releases/latest)**:
 - [FAQ](#faq)
 - [Troubleshooting](#troubleshooting)
 - [Roadmap](#roadmap)
-- [Developer](#developer)
 - [🇹🇷 Türkçe özet](#-türkçe-özet)
 - [License](#license)
 
@@ -371,19 +370,6 @@ domain setup wizard is on the roadmap.
 - [ ] 24-hour soak with power/thermal measurements on real hardware
 - [ ] Optional custom domain helper and richer tunnel diagnostics
 - [ ] Play Store build (`specialUse` justification + privacy policy) once device coverage is done
-
-## Developer
-
-Built and maintained by **[@mr_cimen_](https://github.com/PrivyXe)**.
-
-<p>
-  <a href="https://x.com/PrivyXe">X (Twitter) — @PrivyXe</a> ·
-  <a href="https://github.com/PrivyXe">GitHub — PrivyXe</a> ·
-  <a href="https://www.instagram.com/mr_cimen_">Instagram — @mr_cimen_</a>
-</p>
-
-If PocketHost runs (or fails) on your phone, tell me the model, Android version and what happened —
-real-device coverage is the most valuable feedback right now.
 
 ## 🇹🇷 Türkçe özet
 
