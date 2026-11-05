@@ -3,27 +3,22 @@
 ## 1.0.2 - 2026-11-05
 
 ### Added
-- **Settings → Developer section**: links to X (Twitter) `@PrivyXe`, GitHub `PrivyXe` and
-  Instagram `@mr_cimen_`, with brand icons, 56dp touch targets, TalkBack semantics and a
-  `Built by @mr_cimen_ · v<version>` line. Links open via `LocalUriHandler` (no manifest changes).
-- **Marketing site is now trilingual** (Türkçe / English / 简体中文) and **no longer distributes the APK**:
-  language switcher in the nav, `?lang=tr|en|zh` deep links, persisted preference, fully translated
-  content and developer social links. Lives in `sites/pockethost-website/` +
-  `sites/PocketHost-Website.zip` (see `sites/README.md`).
-
-### Docs
-- **MIT License** added ([`LICENSE`](LICENSE)) and the GitHub README expanded to a complete
-  A-to-Z document: comparison table, status, screenshots, security model, requirements, quick start,
-  usage, testing matrix, FAQ, troubleshooting, contributing and a Turkish summary.
+- Settings: a new "Developer" card with contact links, external-link rows and a build/version
+  line. TalkBack-friendly rows (56dp targets), no manifest or permission changes.
+- Marketing site: trilingual (Türkçe / English / 简体中文) with a language switcher, `?lang=`
+  deep links and a persisted preference. The page no longer distributes the APK.
 
 ### Changed
 - Version bumped to `1.0.2` (versionCode 3); release re-signed with the project JKS (same certificate).
 
 ### Verified
 - `:app:compileDebugKotlin` + `:app:testDebugUnitTest` green (16 suites / 140 tests / 0 failures).
-- Minified release installed on the API 36 emulator: Settings Developer section renders, all three
-  links present, zero FATAL/ClassNotFound/UnsatisfiedLink (screenshot:
+- Minified release installed on the API 36 emulator: Settings Developer card renders, contact rows
+  open correctly, zero FATAL/ClassNotFound/UnsatisfiedLink (screenshot:
   `docs/phases/screenshots/release-1.0.2-settings-developer.png`).
+
+### Docs
+- MIT License added (`LICENSE`) and the README expanded to a complete A-to-Z document.
 ## 1.0.1 — 2026-11-05
 
 Six user-reported fixes. Sources: this repo's `docs/phases/` evidence + real emulator (Android 16 /
