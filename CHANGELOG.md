@@ -1,5 +1,34 @@
 # Changelog
 
+## 1.0.4 - 2026-11-05
+
+### Fixed
+- **A connected Cloudflare Tunnel no longer disconnects when hosting stops.** `STOP HOSTING` now
+  stops only the Go engine; the foreground service, its notification and the wake/Wi-Fi locks stay
+  alive while a tunnel is connecting/connected. The connector remains registered and the same
+  hostname returns `200` again as soon as hosting is restarted — no reconnect, no new URL. While
+  hosting is stopped the origin is offline, so Cloudflare answers `530/1033` (or `502`).
+- **Saved Named Tunnel tokens are visible and reusable.** After `SAVE` the input is cleared and a
+  "Saved token ••••<last4>" card with **CONNECT WITH SAVED TOKEN** is shown; it survives app
+  restarts (Android Keystore AES-256-GCM) and needs no re-pasting. Connecting with a saved token
+  asks for the same public-exposure consent as a typed token.
+- **Tunnel-only state is honest.** Connecting while hosting is stopped is allowed (origin offline
+  until hosting starts); the notification says "Tunnel connected / Hosting is stopped — visitors
+  get 502 until you start hosting" with Start hosting / Disconnect tunnel actions. Disconnecting
+  the last active component stops the service and releases the locks.
+- Dashboard and Tunnel copy explain that stopping hosting keeps the tunnel connected; an
+  origin-offline banner appears when hosting is off but the tunnel is up.
+
+### Changed
+- Version 1.0.4 (versionCode 5); re-signed with the project JKS (same certificate).
+
+### Verified
+- 173 JVM tests / 18 suites, 0 failures (+9 tunnel-lifecycle tests).
+- Emulator (Android 16): Quick Tunnel → `STOP HOSTING` keeps the tunnel `CONNECTED` and the
+  foreground notification alive, and the public URL answers `530` (Cloudflare 1033, origin
+  offline); `START HOSTING` makes the **same URL** return `200` without reconnecting; the
+  saved-token card persists across an app restart; **CONNECT WITH SAVED TOKEN** shows consent and
+  fails fast on an invalid token, then tears the service down cleanly.
 ## 1.0.3 - 2026-11-05
 
 ### Fixed
