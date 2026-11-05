@@ -1,5 +1,32 @@
 # Changelog
 
+## 1.0.5 - 2026-11-05
+
+### Fixed
+- **Harmless cloudflared disconnect lines are no longer shown as tunnel errors.** Browser
+  refreshes, closed tabs and idle QUIC streams make Go's `context.Context` return
+  `context canceled`, and cloudflared logs `Error shutting down control stream`; these are normal
+  architecture behaviour, not tunnel failures. The log parser now classifies them as INFO next to
+  the existing DNS-resolver benign pattern, so the Tunnel screen no longer pops a red/amber banner
+  on every refresh.
+- **"Not exposed publicly" copy while a Named Tunnel is connected.** When the tunnel is CONNECTED
+  in Named mode but the app cannot derive the hostname from the token, the Public URL card now
+  reads **"Managed via Zero Trust"** with the hint "Custom hostname routed through your tunnel
+  (managed in Zero Trust)" instead of the contradictory "Not exposed publicly". Applied on both
+  Dashboard and Tunnel screens.
+
+### Changed
+- Version 1.0.5 (versionCode 6); re-signed with the project JKS (same certificate).
+- Public hostname documented as **downmonitor.app** (verified live: HTTP 200 through Cloudflare,
+  engine headers, branded 404).
+
+### Verified
+- 174 JVM tests / 18 suites, 0 failures (new parser tests for `context canceled` /
+  `shutting down control stream`, including `firstErrorLine` ignoring them).
+- Emulator: Quick Tunnel connected, repeated page loads and aborted requests produced no tunnel
+  warning/error banner (status stayed `CONNECTED`, 1 connection shown for the quick tunnel).
+- External: `https://downmonitor.app/` → `200 text/html`, `/css/styles.css` → `200 text/css`,
+  `/assets/logo.svg` → `200 image/svg+xml`, unknown path → engine's branded `404`.
 ## 1.0.4 - 2026-11-05
 
 ### Fixed
