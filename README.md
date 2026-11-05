@@ -32,7 +32,7 @@ site is live on Wi-Fi. Optionally expose it to the world over HTTPS with Cloudfl
 
 <img src="assets/screenshots/dashboard.png" width="290" alt="PocketHost dashboard while hosting" />
 
-**🌐 Live, served from a phone: [downmonitor.app](https://downmonitor.app/)** · **Mirror: [privyxe.github.io/PocketHost](https://privyxe.github.io/PocketHost/)** · **⬇️ Download: [latest release](../../releases/latest)**
+**🌐 Public hostname (served from the phone when hosting + tunnel are connected): [downmonitor.app](https://downmonitor.app/)** · **Mirror: [privyxe.github.io/PocketHost](https://privyxe.github.io/PocketHost/)** · **⬇️ Download: [latest release](../../releases/latest)**
 
 </div>
 
@@ -110,12 +110,15 @@ backends. It is a pocket-sized static-site host for demos, prototypes, portfolio
 |---|---|
 | **Release** | `1.0.4` (versionCode 5) — signed ARM64 APK, 13.51 MB, `arm64-v8a` only |
 | **Signed with** | project JKS, APK Signature Scheme **v2 + v3**, R8-minified |
-| **Verified on** | Android 16 / API 36 emulator (x86_64): import → host → real HTTP round-trips; **live** on a physical Android 16 phone via Named Tunnel → [downmonitor.app](https://downmonitor.app/) |
+| **Verified on** | Android 16 / API 36 emulator (x86_64): import → host → real HTTP round-trips; **verified live** on a physical Android 16 phone via Named Tunnel → [downmonitor.app](https://downmonitor.app/) |
 | **Engine** | Go stdlib `net/http`, embedded via `gomobile bind` (`libgojni.so`), 16 KB page-aligned |
 | **Tests** | 173 JVM unit tests (18 suites) + 72 top-level Go tests + instrumented end-to-end runs |
 | **Tunnel** | bundled `cloudflared` 2026.10.7 (pinned source, patched DNS resolver); Quick Tunnel verified externally; **Named Tunnel + custom domain verified live** → [downmonitor.app](https://downmonitor.app/) |
 | **License** | [MIT](LICENSE) |
 
+> The phone is the origin: when hosting and the Named Tunnel are disconnected (or Android kills
+> the app process), Cloudflare answers `1033` for this hostname. Start hosting and connect the
+> tunnel to bring it back.
 ## Screens
 
 <table>
@@ -335,6 +338,8 @@ the repository. The Android/Go source tree is maintained privately.
 
 ## Known limitations
 
+- The public hostname is only as available as the phone: when hosting is stopped and the tunnel is
+  disconnected, or the app process is killed, Cloudflare answers `1033` for it.
 - Automated tests run on the API 36 emulator; the ARM64 release also runs live on a physical Android 16 phone (user-operated) serving `https://downmonitor.app/`, but this workspace did not run instrumented tests on that device.
 - `www.downmonitor.app` (and any additional hostname) is not configured yet; only the apex hostname
   is published on the live Named Tunnel.
