@@ -17,9 +17,9 @@ site is live on Wi-Fi. Optionally expose it to the world over HTTPS with Cloudfl
   <img alt="Go" src="https://img.shields.io/badge/Go-stdlib%20only-00ADD8?style=flat-square&logo=go&logoColor=white" />
 </p>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.3-0f766e?style=flat-square" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.0.4-0f766e?style=flat-square" />
   <img alt="APK size" src="https://img.shields.io/badge/APK-13.5%20MB-0f766e?style=flat-square" />
-  <img alt="Tests" src="https://img.shields.io/badge/tests-164%20JVM%20%C2%B7%2072%20Go-2dd4bf?style=flat-square" />
+  <img alt="Tests" src="https://img.shields.io/badge/tests-173%20JVM%20%C2%B7%2072%20Go-2dd4bf?style=flat-square" />
   <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-0f766e?style=flat-square" />
   <img alt="Platform" src="https://img.shields.io/badge/platform-arm64--v8a-2dd4bf?style=flat-square" />
 </p>
@@ -44,9 +44,9 @@ Get the signed APK from **[Releases](../../releases/latest)**:
 
 | File | Details |
 |---|---|
-| `PocketHost-1.0.3-arm64.apk` | 13.50 MB · `arm64-v8a` only · Android 8.0+ · signed v2+v3 |
-| `PocketHost-1.0.3-arm64.apk.sha256` | SHA-256 checksum — verify before installing |
-| `PocketHost-1.0.3.json` | machine-readable build manifest (versionCode 4) |
+| `PocketHost-1.0.4-arm64.apk` | 13.51 MB · `arm64-v8a` only · Android 8.0+ · signed v2+v3 |
+| `PocketHost-1.0.4-arm64.apk.sha256` | SHA-256 checksum — verify before installing |
+| `PocketHost-1.0.4.json` | machine-readable build manifest (versionCode 5) |
 
 > **Sideload only.** PocketHost is not on Google Play. No account, no ads, no analytics.
 > Install: open the APK on an **ARM64** Android 8.0+ phone → allow "install unknown apps" → install.
@@ -108,11 +108,11 @@ backends. It is a pocket-sized static-site host for demos, prototypes, portfolio
 
 | | |
 |---|---|
-| **Release** | `1.0.3` (versionCode 4) — signed ARM64 APK, 13.50 MB, `arm64-v8a` only |
+| **Release** | `1.0.4` (versionCode 5) — signed ARM64 APK, 13.51 MB, `arm64-v8a` only |
 | **Signed with** | project JKS, APK Signature Scheme **v2 + v3**, R8-minified |
 | **Verified on** | Android 16 / API 36 emulator (x86_64): import → host → real HTTP round-trips; **live** on a physical Android 16 phone via Named Tunnel → [vitalranges.com](https://vitalranges.com/) |
 | **Engine** | Go stdlib `net/http`, embedded via `gomobile bind` (`libgojni.so`), 16 KB page-aligned |
-| **Tests** | 164 JVM unit tests (17 suites) + 72 top-level Go tests + instrumented end-to-end runs |
+| **Tests** | 173 JVM unit tests (18 suites) + 72 top-level Go tests + instrumented end-to-end runs |
 | **Tunnel** | bundled `cloudflared` 2026.10.7 (pinned source, patched DNS resolver); Quick Tunnel verified externally; **Named Tunnel + custom domain verified live** → [vitalranges.com](https://vitalranges.com/) |
 | **License** | [MIT](LICENSE) |
 
@@ -248,7 +248,7 @@ flowchart LR
 
 ## Install & first site
 
-1. Download `PocketHost-1.0.3-arm64.apk` from **[Releases](../../releases/latest)**; optionally
+1. Download `PocketHost-1.0.4-arm64.apk` from **[Releases](../../releases/latest)**; optionally
    verify the published SHA-256.
 2. Open it on the phone → allow "install unknown apps" → install → launch.
 3. Allow notifications (required for background hosting).
@@ -307,7 +307,7 @@ The ongoing notification keeps hosting alive in the background and offers a **ST
 
 ## Quality & verification
 
-- **164 JVM unit tests** across 16 suites (ZIP security, root detection, engine protocol, log
+- **173 JVM unit tests** across 16 suites (ZIP security, root detection, engine protocol, log
   redaction, settings, tunnel parsing, metrics maths).
 - **72 top-level Go tests** across 5 packages (routing, default/secondary sites, `304`/`HEAD`/`405`,
   traversal reject, ZIP validation + CRC, percentiles `p50 ≤ p95 ≤ max`, command bus).
