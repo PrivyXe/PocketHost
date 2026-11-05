@@ -1,5 +1,33 @@
 # Changelog
 
+## 1.0.3 - 2026-11-05
+
+### Fixed
+- **Windows/AI-tool ZIPs are accepted again**: entry names that use `\` separators are normalized
+  to `/` instead of being rejected with "ZIP entry uses backslash path separators". Security is
+  unchanged: `..\` traversal, absolute paths, drive letters, symlinks, special files and
+  cross-separator duplicates are still refused.
+- Import failure headline is source-agnostic ("The import could not be completed") and the success
+  screen now shows the source (ZIP archive / Folder / Single HTML file).
+
+### Added
+- **Folder import**: pick an already-extracted folder through the Android folder picker
+  (`OpenDocumentTree`). The tree is copied into private storage with the same limits as ZIP import
+  (total bytes, per-file size, entry count, depth), then shares root detection, analysis and the
+  atomic move/persist pipeline. Providers without child-document support get a clear "use a ZIP"
+  message.
+- Import progress labels are now source-neutral ("Copying files…", "Validating input…").
+
+### Changed
+- Version 1.0.3 (versionCode 4); release re-signed with the project JKS (same certificate).
+
+### Verified
+- 164 JVM tests / 17 suites, 0 failures (+24 import tests: 16 folder-import, 8 Windows-ZIP,
+  1 extractor end-to-end).
+- Device (debug + minified release): a ZIP containing `css\style.css`, `js\app.js`,
+  ` assests\logo.svg` imports and serves (`/`, `/css/style.css`, `/%20assests/logo.svg` → 200,
+  missing file → 404); a folder picked through `OpenDocumentTree` imports and serves at
+  `/s/<id>/` (`index.html`, CSS, SVG → 200).
 ## 1.0.2 - 2026-11-05
 
 ### Added
