@@ -24,6 +24,9 @@
 ### Verified
 - 164 JVM tests / 17 suites, 0 failures (+24 import tests: 16 folder-import, 8 Windows-ZIP,
   1 extractor end-to-end).
+- **Named Tunnel verified end-to-end with a real Cloudflare token** on a physical Android 16 phone:
+  `https://vitalranges.com/` serves the imported site through Cloudflare (HTTP 200, engine headers,
+  branded 404, HTTP→HTTPS 301). Evidence: `docs/phases/phase-5-cloudflare.md` section 7.
 - Device (debug + minified release): a ZIP containing `css\style.css`, `js\app.js`,
   ` assests\logo.svg` imports and serves (`/`, `/css/style.css`, `/%20assests/logo.svg` → 200,
   missing file → 404); a folder picked through `OpenDocumentTree` imports and serves at
