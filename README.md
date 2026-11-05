@@ -32,7 +32,7 @@ site is live on Wi-Fi. Optionally expose it to the world over HTTPS with Cloudfl
 
 <img src="assets/screenshots/dashboard.png" width="290" alt="PocketHost dashboard while hosting" />
 
-**🌐 Live, served from a phone: [vitalranges.com](https://vitalranges.com/)** · **Mirror: [privyxe.github.io/PocketHost](https://privyxe.github.io/PocketHost/)** · **⬇️ Download: [latest release](../../releases/latest)**
+**🌐 Live, served from a phone: [downmonitor.app](https://downmonitor.app/)** · **Mirror: [privyxe.github.io/PocketHost](https://privyxe.github.io/PocketHost/)** · **⬇️ Download: [latest release](../../releases/latest)**
 
 </div>
 
@@ -110,10 +110,10 @@ backends. It is a pocket-sized static-site host for demos, prototypes, portfolio
 |---|---|
 | **Release** | `1.0.4` (versionCode 5) — signed ARM64 APK, 13.51 MB, `arm64-v8a` only |
 | **Signed with** | project JKS, APK Signature Scheme **v2 + v3**, R8-minified |
-| **Verified on** | Android 16 / API 36 emulator (x86_64): import → host → real HTTP round-trips; **live** on a physical Android 16 phone via Named Tunnel → [vitalranges.com](https://vitalranges.com/) |
+| **Verified on** | Android 16 / API 36 emulator (x86_64): import → host → real HTTP round-trips; **live** on a physical Android 16 phone via Named Tunnel → [downmonitor.app](https://downmonitor.app/) |
 | **Engine** | Go stdlib `net/http`, embedded via `gomobile bind` (`libgojni.so`), 16 KB page-aligned |
 | **Tests** | 173 JVM unit tests (18 suites) + 72 top-level Go tests + instrumented end-to-end runs |
-| **Tunnel** | bundled `cloudflared` 2026.10.7 (pinned source, patched DNS resolver); Quick Tunnel verified externally; **Named Tunnel + custom domain verified live** → [vitalranges.com](https://vitalranges.com/) |
+| **Tunnel** | bundled `cloudflared` 2026.10.7 (pinned source, patched DNS resolver); Quick Tunnel verified externally; **Named Tunnel + custom domain verified live** → [downmonitor.app](https://downmonitor.app/) |
 | **License** | [MIT](LICENSE) |
 
 ## Screens
@@ -159,7 +159,7 @@ backends. It is a pocket-sized static-site host for demos, prototypes, portfolio
 
 ### Tunnel
 - Optional **Quick Tunnel** → temporary `https://*.trycloudflare.com` URL (no Cloudflare account).
-- Optional **Named Tunnel** → persistent hostname (verified live at `vitalranges.com`); tokens are encrypted at rest with Android
+- Optional **Named Tunnel** → persistent hostname (verified live at `downmonitor.app`); tokens are encrypted at rest with Android
   Keystore AES-256-GCM and never written to logs or passed on the command line (env-only).
 - Bundled `cloudflared` is built from pinned source with a small Android DNS patch
   (`net.DefaultResolver` → `1.1.1.1` / `8.8.8.8`), so no `--edge` hacks are needed.
@@ -335,8 +335,8 @@ the repository. The Android/Go source tree is maintained privately.
 
 ## Known limitations
 
-- Automated tests run on the API 36 emulator; the ARM64 release also runs live on a physical Android 16 phone (user-operated) serving `https://vitalranges.com/`, but this workspace did not run instrumented tests on that device.
-- `www.vitalranges.com` (and any additional hostname) is not configured yet; only the apex hostname
+- Automated tests run on the API 36 emulator; the ARM64 release also runs live on a physical Android 16 phone (user-operated) serving `https://downmonitor.app/`, but this workspace did not run instrumented tests on that device.
+- `www.downmonitor.app` (and any additional hostname) is not configured yet; only the apex hostname
   is published on the live Named Tunnel.
 - Longest continuous soak so far is a short measured session, not 24 h.
 - Absolute-path assets on **secondary** `/s/<id>/` sites need relative paths (or the Referer
@@ -403,7 +403,7 @@ domain setup wizard is on the roadmap.
 
 ## Roadmap
 
-- [x] Physical ARM64 execution: live at [vitalranges.com](https://vitalranges.com/) (user-operated Android 16 phone)
+- [x] Physical ARM64 execution: live at [downmonitor.app](https://downmonitor.app/) (user-operated Android 16 phone)
 - [x] Named Tunnel end-to-end verification with a real Cloudflare token (2026-11-05)
 - [ ] 24-hour soak with power/thermal measurements on real hardware
 - [ ] Optional custom domain helper and richer tunnel diagnostics
