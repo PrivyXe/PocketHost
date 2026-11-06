@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title data-i18n="meta.title">PocketHost — Telefonunu web sunucusuna dönüştür</title>
-  <meta name="description" data-i18n-attr="content:meta.desc" content="PocketHost, AI ile ürettiğin statik siteyi ZIP olarak telefonuna atıp tek dokunuşla yayınlamanı sağlar. Linux yok, Termux yok, root yok." />
+  <meta name="description" data-i18n-attr="content:meta.desc" content="PocketHost, AI ile ürettiğin statik siteyi ZIP olarak veya Termux'ta çalışan Node/PHP/Python sunucunu telefonundan yayınlar. Linux ve root gerekmez; Termux upstream isteğe bağlıdır." />
   <meta name="theme-color" content="#070b0f" />
   <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="css/styles.css" />
@@ -72,7 +72,7 @@
       <div class="container hero-inner">
         <div class="hero-copy">
           <p class="eyebrow reveal">
-            <span class="dot"></span> <span data-i18n="hero.badge">Android 8+ · ARM64 · bağımsız proje</span>
+            <span class="dot"></span> <span data-i18n="hero.badge">Android 8+ · ARM64 · v1.1.3</span>
           </p>
           <h1 class="reveal" data-i18n-html="hero.title">Telefonunu bir<br /><span class="grad">web sunucusuna</span> dönüştür.</h1>
           <p class="lead reveal" data-i18n-html="hero.lead">
@@ -101,7 +101,7 @@
             <img src="assets/screenshots/dashboard.png" width="720" height="1600" alt="PocketHost dashboard" />
           </div>
           <span class="chip chip-a" data-i18n="hero.chip1">Go HTTP motoru</span>
-          <span class="chip chip-b" data-i18n="hero.chip2">ZIP → yayın</span>
+          <span class="chip chip-b" data-i18n="hero.chip2">ZIP + Termux</span>
           <span class="chip chip-c" data-i18n="hero.chip3">Cloudflare Tunnel</span>
         </div>
       </div>
@@ -110,7 +110,7 @@
     <!-- ============================== STATS ============================== -->
     <section class="stats container" aria-label="Stats">
       <div class="stat reveal"><strong data-i18n="stats.s1v">1 dokunuş</strong><span data-i18n="stats.s1l">yayına alma</span></div>
-      <div class="stat reveal"><strong data-i18n="stats.s2v">13,5 MB</strong><span data-i18n="stats.s2l">uygulama boyutu</span></div>
+      <div class="stat reveal"><strong data-i18n="stats.s2v">13,8 MB</strong><span data-i18n="stats.s2l">uygulama boyutu</span></div>
       <div class="stat reveal"><strong data-i18n="stats.s3v">2 katman</strong><span data-i18n="stats.s3l">LAN + Cloudflare HTTPS</span></div>
       <div class="stat reveal"><strong data-i18n="stats.s4v">0</strong><span data-i18n="stats.s4l">reklam & izleyici</span></div>
     </section>
@@ -155,6 +155,11 @@
             <h3 data-i18n="f6.title">Gizlilik odaklı</h3>
             <p data-i18n="f6.body">Sadece uygulamaya özel depolama; geniş depolama izni yok. Yönetim yüzeyi HTTP'ye açılmaz. Dosya erişimi her site köküne os.Root ile hapsedilir.</p>
           </article>
+          <article class="card feature reveal">
+            <div class="ico"><svg viewBox="0 0 24 24"><path d="M4 12h6m4 0h6M7 8v8M17 8v8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="2.5" y="5" width="19" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div>
+            <h3 data-i18n="f7.title">Termux port proxy</h3>
+            <p data-i18n="f7.body">Node, PHP, Python veya Go sunucunu Termux'ta 127.0.0.1'e bağla; PocketHost tüm metotları, SSE'yi ve WebSocket'i proxy'ler. APK'ya runtime gömülmez; Host modu her proxy için ayrı seçilir.</p>
+          </article>
         </div>
       </div>
     </section>
@@ -174,8 +179,8 @@
           </li>
           <li class="card step reveal">
             <span class="step-no">02</span>
-            <h3 data-i18n="how.s2.title">Siteyi içe aktar</h3>
-            <p data-i18n="how.s2.body">AI aracından indirdiğin ZIP'i İçe Aktar ile seç. PocketHost kök dizini bulur, dosyaları doğrular ve özet çıkarır.</p>
+            <h3 data-i18n="how.s2.title">Site ekle veya proxy bağla</h3>
+            <p data-i18n="how.s2.body">AI ZIP'ini İçe Aktar ile seç ya da ADD PORT PROXY ile Termux portunu bağla. PocketHost kök dizini bulur, doğrular; proxy'de canlı upstream taraması yapar.</p>
           </li>
           <li class="card step reveal">
             <span class="step-no">03</span>
@@ -191,7 +196,7 @@
       <div class="container">
         <div class="section-head">
           <p class="eyebrow reveal"><span class="dot"></span> <span data-i18n="screens.overline">Uygulama içinden</span></p>
-          <h2 class="reveal" data-i18n="screens.heading">Panel, siteler, tünel.</h2>
+          <h2 class="reveal" data-i18n="screens.heading">Panel, siteler, port proxy.</h2>
           <p class="section-lead reveal" data-i18n="screens.lead">Gerçek ekran görüntüleri — koyu ve açık tema desteklenir.</p>
         </div>
 
@@ -226,6 +231,18 @@
             </button>
             <figcaption><strong data-i18n="g5.title">Ayarlar</strong><span data-i18n="g5.sub">Port, bağlama modu, tema</span></figcaption>
           </figure>
+          <figure class="shot reveal">
+            <button class="shot-btn" type="button" data-full="assets/screenshots/proxy-add.png" aria-label="Add port proxy">
+              <img src="assets/screenshots/proxy-add.png" width="720" height="1600" loading="lazy" alt="Add port proxy" />
+            </button>
+            <figcaption><strong data-i18n="g6.title">Port proxy</strong><span data-i18n="g6.sub">Termux upstream, canlı durum</span></figcaption>
+          </figure>
+          <figure class="shot reveal">
+            <button class="shot-btn" type="button" data-full="assets/screenshots/proxy-detail.png" aria-label="Proxy detail">
+              <img src="assets/screenshots/proxy-detail.png" width="720" height="1600" loading="lazy" alt="Proxy detail" />
+            </button>
+            <figcaption><strong data-i18n="g7.title">Proxy detayı</strong><span data-i18n="g7.sub">Host modu, Termux komutları</span></figcaption>
+          </figure>
         </div>
       </div>
     </section>
@@ -241,12 +258,13 @@
           <dl>
             <div><dt data-i18n="spec.platform">Platform</dt><dd data-i18n="spec.platformV">Android 8.0+ (API 26) · hedef SDK 36</dd></div>
             <div><dt data-i18n="spec.abi">Mimari</dt><dd data-i18n="spec.abiV">arm64-v8a</dd></div>
-            <div><dt data-i18n="spec.engine">Sunucu motoru</dt><dd data-i18n="spec.engineV">Go net/http · gomobile ile süreç içinde</dd></div>
+            <div><dt data-i18n="spec.engine">Sunucu motoru</dt><dd data-i18n="spec.engineV">Go net/http · gomobile ile süreç içinde · reverse proxy</dd></div>
             <div><dt data-i18n="spec.tunnel">Tünel</dt><dd data-i18n="spec.tunnelV">cloudflared 2026.10.7 · 1.1.1.1/8.8.8.8 DNS yaması · 16 KB uyumlu</dd></div>
             <div><dt data-i18n="spec.data">Veri</dt><dd data-i18n="spec.dataV">Yalnızca uygulamaya özel depolama + Room/SQLite</dd></div>
             <div><dt data-i18n="spec.security">Güvenlik</dt><dd data-i18n="spec.securityV">Keystore AES-256-GCM · os.Root hapsi · JNI-only yönetim</dd></div>
             <div><dt data-i18n="spec.perms">İzinler</dt><dd data-i18n="spec.permsV">İnternet, ağ durumu, foreground service, bildirim, wake lock</dd></div>
             <div><dt data-i18n="spec.price">Ücret</dt><dd data-i18n="spec.priceV">Yerel barındırma ücretsiz · reklam ve izleme yok</dd></div>
+            <div><dt data-i18n="spec.plan">Plan</dt><dd data-i18n="spec.planV">Geliştirme katmanı: 1 statik site + 1 port proxy</dd></div>
           </dl>
         </div>
       </div>
@@ -279,7 +297,7 @@
             </span>
             <span class="social-copy">
               <strong data-i18n="links.gh">GitHub</strong>
-              <span data-i18n="links.ghSub">PrivyXe · kaynak kod ve sürümler</span>
+              <span data-i18n="links.ghSub">PrivyXe/PocketHost · sürümler ve dokümantasyon</span>
             </span>
             <svg class="social-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
@@ -322,7 +340,7 @@
           </details>
           <details class="card reveal">
             <summary data-i18n="q4.q">Hangi siteler destekleniyor?</summary>
-            <p data-i18n="q4.a">Statik siteler: HTML, CSS, JavaScript, resimler, fontlar. PHP, MySQL, Node.js veya Docker desteklenmez — PocketHost'un amacı statik site barındırmaktır.</p>
+            <p data-i18n="q4.a">Statik siteler (HTML/CSS/JS/resim/font) ve Termux'ta çalışan Node/PHP/Python sunucularına port proxy. PHP/Node runtime'ı APK'ya gömülmez; MySQL veya Docker yoktur. Proxy'lerde Host başlığı proxy başına seçilebilir.</p>
           </details>
           <details class="card reveal">
             <summary data-i18n="q5.q">Cloudflare Tunnel ücretli mi?</summary>
