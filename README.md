@@ -4,11 +4,13 @@
 
 # PocketHost
 
-**A real static web server in your pocket.**
+**A real web server in your pocket — static sites + Termux port proxies.**
 
-Turn an ordinary Android phone into a personal website host — no Linux, no Termux, no root,
-no command line. Drop in a ZIP from any AI website builder, press **START HOSTING**, and your
-site is live on Wi-Fi. Optionally expose it to the world over HTTPS with Cloudflare Tunnel.
+Turn an ordinary Android phone into a personal website host — no Linux, no root, no command
+line. Drop in a ZIP from any AI website builder, press **START HOSTING**, and the site is live on
+Wi-Fi. Or reverse-proxy a Node/PHP/Python server already running in Termux (`127.0.0.1:<port>`)
+under the same address — all methods, SSE and WebSocket included. Optionally expose it over HTTPS
+with Cloudflare Tunnel.
 
 <p>
   <img alt="Android 8.0+" src="https://img.shields.io/badge/Android-8.0%2B-3DDC84?style=flat-square&logo=android&logoColor=white" />
@@ -17,9 +19,9 @@ site is live on Wi-Fi. Optionally expose it to the world over HTTPS with Cloudfl
   <img alt="Go" src="https://img.shields.io/badge/Go-stdlib%20only-00ADD8?style=flat-square&logo=go&logoColor=white" />
 </p>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.5-0f766e?style=flat-square" />
-  <img alt="APK size" src="https://img.shields.io/badge/APK-13.5%20MB-0f766e?style=flat-square" />
-  <img alt="Tests" src="https://img.shields.io/badge/tests-174%20JVM%20%C2%B7%2072%20Go-2dd4bf?style=flat-square" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.1.3-0f766e?style=flat-square" />
+  <img alt="APK size" src="https://img.shields.io/badge/APK-13.77%20MB-0f766e?style=flat-square" />
+  <img alt="Tests" src="https://img.shields.io/badge/tests-207%20JVM%20%C2%B7%20103%20Go-2dd4bf?style=flat-square" />
   <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-0f766e?style=flat-square" />
   <img alt="Platform" src="https://img.shields.io/badge/platform-arm64--v8a-2dd4bf?style=flat-square" />
 </p>
@@ -44,9 +46,9 @@ Get the signed APK from **[Releases](../../releases/latest)**:
 
 | File | Details |
 |---|---|
-| `PocketHost-1.0.5-arm64.apk` | 13.51 MB · `arm64-v8a` only · Android 8.0+ · signed v2+v3 |
-| `PocketHost-1.0.5-arm64.apk.sha256` | SHA-256 checksum — verify before installing |
-| `PocketHost-1.0.5.json` | machine-readable build manifest (versionCode 6) |
+| `PocketHost-1.1.3-arm64.apk` | 13.77 MB · `arm64-v8a` only · Android 8.0+ · signed v2+v3 |
+| `PocketHost-1.1.3-arm64.apk.sha256` | SHA-256 checksum — verify before installing |
+| `PocketHost-1.1.3.json` | machine-readable build manifest (versionCode 10) |
 
 > **Sideload only.** PocketHost is not on Google Play. No account, no ads, no analytics.
 > Install: open the APK on an **ARM64** Android 8.0+ phone → allow "install unknown apps" → install.
@@ -101,18 +103,20 @@ step one tap:
 | Data stays on device | ✅ | ✅ | ❌ | ❌ |
 | Real device metrics | ✅ | ❌ | ❌ | ❌ |
 
-PocketHost is deliberately **not** a server for production workloads, databases or dynamic
-backends. It is a pocket-sized static-site host for demos, prototypes, portfolios and local testing.
+PocketHost is deliberately **not** a production server and does not embed a dynamic runtime.
+It hosts static sites and can reverse-proxy a Node/PHP/Python/Go process you already run in Termux
+(no Node/PHP binary in the APK, no MySQL, no Docker). It is a pocket-sized host for demos,
+prototypes, portfolios and local testing.
 
 ## Status
 
 | | |
 |---|---|
-| **Release** | `1.0.5` (versionCode 6) — signed ARM64 APK, 13.51 MB, `arm64-v8a` only |
+| **Release** | `1.1.3` (versionCode 10) — signed ARM64 APK, 13.77 MB, `arm64-v8a` only |
 | **Signed with** | project JKS, APK Signature Scheme **v2 + v3**, R8-minified |
-| **Verified on** | Android 16 / API 36 emulator (x86_64): import → host → real HTTP round-trips; **verified live** on a physical Android 16 phone via Named Tunnel → [downmonitor.app](https://downmonitor.app/) |
-| **Engine** | Go stdlib `net/http`, embedded via `gomobile bind` (`libgojni.so`), 16 KB page-aligned |
-| **Tests** | 174 JVM unit tests (18 suites) + 72 top-level Go tests + instrumented end-to-end runs |
+| **Verified on** | Android 16 / API 36 emulator (x86_64): import → host → real HTTP round-trips, proxy E2E (all methods, SSE, WebSocket 101, 502, scan), Room 1→3 migration; **verified live** on a physical Android 16 phone via Named Tunnel → [downmonitor.app](https://downmonitor.app/) |
+| **Engine** | Go stdlib `net/http` + `httputil.ReverseProxy`, embedded via `gomobile bind` (`libgojni.so`), 16 KB page-aligned; reverse proxy is loopback-only |
+| **Tests** | 207 JVM unit tests (23 suites) + 103 top-level Go tests / 254 total + instrumented end-to-end runs (20 executed) |
 | **Tunnel** | bundled `cloudflared` 2026.10.7 (pinned source, patched DNS resolver); Quick Tunnel verified externally; **Named Tunnel + custom domain verified live** (4 parallel edge connections) → [downmonitor.app](https://downmonitor.app/) |
 | **License** | [MIT](LICENSE) |
 
@@ -125,12 +129,17 @@ backends. It is a pocket-sized static-site host for demos, prototypes, portfolio
   <tr>
     <td align="center"><img src="assets/screenshots/dashboard.png" width="230" /><br /><sub><b>Dashboard</b><br />server status, LAN URL, site summary</sub></td>
     <td align="center"><img src="assets/screenshots/metrics.png" width="230" /><br /><sub><b>Metrics</b><br />requests, latency, response codes</sub></td>
-    <td align="center"><img src="assets/screenshots/sites.png" width="230" /><br /><sub><b>Sites</b><br />storage, files, index detection</sub></td>
+    <td align="center"><img src="assets/screenshots/sites.png" width="230" /><br /><sub><b>Sites</b><br />static sites + Termux port proxies</sub></td>
   </tr>
   <tr>
+    <td align="center"><img src="assets/screenshots/proxy-add.png" width="230" /><br /><sub><b>Add port proxy</b><br />detects live upstreams :3000/:5173/…</sub></td>
+    <td align="center"><img src="assets/screenshots/proxy-detail.png" width="230" /><br /><sub><b>Proxy detail</b><br />upstream, proxied URL, per-proxy Host mode</sub></td>
     <td align="center"><img src="assets/screenshots/tunnel.png" width="230" /><br /><sub><b>Tunnel</b><br />Quick &amp; Named Cloudflare Tunnel</sub></td>
-    <td align="center"><img src="assets/screenshots/settings.png" width="230" /><br /><sub><b>Settings</b><br />port, bind mode, developer links</sub></td>
-    <td align="center"><img src="assets/screenshots/release.png" width="230" /><br /><sub><b>Signed release</b><br />minified 1.0.x build running</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/screenshots/settings.png" width="230" /><br /><sub><b>Settings</b><br />port, bind mode, default proxy Host</sub></td>
+    <td align="center"><img src="assets/screenshots/release.png" width="230" /><br /><sub><b>Signed release</b><br />minified build running</sub></td>
+    <td></td>
   </tr>
 </table>
 
@@ -143,6 +152,24 @@ backends. It is a pocket-sized static-site host for demos, prototypes, portfolio
 - Directory index handling, custom 404/405 responses, byte-range requests.
 - Foreground service (`specialUse`) + partial wake lock + Wi-Fi lock: keeps serving with the
   screen off, stops cleanly on every path (nav-bar stop, notification action, app kill, reboot).
+- **Port proxies:** forward every method (GET/POST/PUT/PATCH/DELETE/OPTIONS), request bodies,
+  query strings, SSE/long-poll and **WebSocket** upgrades to a loopback upstream.
+
+### Port proxy (Termux)
+- Start a server in Termux (e.g. `node server.js` on `:3000`, `php -S 127.0.0.1:8000`,
+  `python -m http.server 9000`), then **Sites → ADD PORT PROXY**.
+- The app scans common dev ports, lists what is actually listening and offers one-tap selection.
+- The upstream is **always `127.0.0.1:<port>`** — no arbitrary host, no SSRF gadget. A proxy that
+  points at PocketHost's own listening port is rejected (`PROXY_LOOP`) before it can recurse.
+- Mounted under `/s/<id>/`: the prefix is stripped, `X-Forwarded-Prefix`/`X-Forwarded-Host` are set,
+  absolute-path `Location` redirects are rewritten to the prefix, and absolute asset/API calls are
+  routed back to the proxy via the page Referer.
+- **Per-proxy Host header:** each proxy chooses `Preserve client` (original Host + `X-Forwarded-Host`)
+  or `Upstream loopback` (`127.0.0.1:<port>` for Vite `allowedHosts`, Django `ALLOWED_HOSTS`, ...).
+- If the upstream is offline, visitors get a branded **502** page naming the port and the Termux
+  command to start it — never a fake success page. The app shows a live upstream-ONLINE check.
+- Development tier: **1 static website + 1 port proxy** (independent quotas). No Node/PHP runtime is
+  embedded; nothing is executed inside the app.
 
 ### Import
 - ZIP, a single HTML file, or a folder (SAF document tree via OpenDocumentTree).
@@ -193,7 +220,7 @@ ZIP / HTML / folder
 ```
 
 The Kotlin layer never serves files itself: it starts the Go engine over a JSON command bus and the
-Go engine owns the HTTP server, routing and file access.
+Go engine owns the HTTP server, routing, static file access and the loopback reverse proxy.
 
 ## Architecture
 
@@ -228,6 +255,7 @@ flowchart LR
 | UI | Kotlin, Compose, Material 3, single activity | modern Android baseline (minSdk 26) |
 | Storage | Room + app-private files | no broad storage permissions |
 | Secrets | Android Keystore AES-256-GCM | tunnel tokens never stored in plain text |
+| Proxy | `httputil.ReverseProxy` to `127.0.0.1:<port>` | all methods/SSE/WebSocket for free, loopback-only by construction |
 | Tunnel | pinned `cloudflared` built for Android | real Cloudflare connectivity, reproducible build |
 
 ## Security model
@@ -242,11 +270,13 @@ flowchart LR
 | Remote control of the server | no management HTTP endpoint; JNI-only command bus |
 | WebView-based site preview escape | loopback-only URL, JS disabled bridge, no file access |
 | Unwanted internet exposure | LAN bind by default; public exposure requires explicit tunnel consent |
+| Port-proxy SSRF / loop | upstream host is not user-editable (loopback only); `PROXY_LOOP` guard covers start and hot sync |
 
 ## Requirements
 
 - Android **8.0+** (API 26), **ARM64** device, 4 GB RAM or more recommended.
 - Optional: a Cloudflare account + tunnel token for a persistent public hostname.
+- Optional: Termux with a Node/PHP/Python/Go server bound to `127.0.0.1` for port-proxy hosting.
 - Local hosting needs no internet and no account.
 
 ## Install & first site
@@ -258,6 +288,16 @@ flowchart LR
 4. Export your website as a `.zip` with `index.html` at the root (or inside one folder).
 5. **IMPORT WEBSITE** → pick the ZIP → review the summary → confirm.
 6. **START HOSTING** → open `http://<phone-ip>:8080/` from any device on the same Wi-Fi.
+
+### Optional: host a Termux backend (port proxy)
+
+1. Start your server in Termux bound to loopback, e.g. `node server.js` on `127.0.0.1:3000`.
+2. **Sites → ADD PORT PROXY** → the app detects `:3000` → **ADD & START HOSTING**.
+3. Open `http://<phone-ip>:8080/s/<proxy-id>/`. If your dev server validates the Host header
+   (Vite, Django, Rails), set **Upstream Host header → Upstream loopback** on the proxy detail screen.
+4. Stop the Termux server and reload: PocketHost answers a branded `502` page with the command to
+   start it again.
+
 ### Optional: a custom domain with Cloudflare Tunnel
 
 A Quick Tunnel gives you a temporary `*.trycloudflare.com` URL and needs no account. For a
@@ -298,8 +338,8 @@ A Quick Tunnel gives you a temporary `*.trycloudflare.com` URL and needs no acco
 ## Using the app
 
 1. **Dashboard** — start/stop hosting, see the LAN URL, public URL and the default site summary.
-2. **Sites** — import, preview, enable/disable, delete, inspect files. Secondary sites are served
-   at `/s/<site-id>/`.
+2. **Sites** — import, preview, enable/disable, delete, inspect files, or **ADD PORT PROXY** for a
+   Termux upstream. Secondary sites/proxies are served at `/s/<site-id>/`.
 3. **Metrics** — requests, connections, status codes, latency percentiles, device/process memory,
    battery temperature, storage and network counters. Reset at any time.
 4. **Tunnel** — connect a Quick Tunnel or paste a Named Tunnel token; watch the live log tail and
@@ -310,13 +350,16 @@ The ongoing notification keeps hosting alive in the background and offers a **ST
 
 ## Quality & verification
 
-- **174 JVM unit tests** across 16 suites (ZIP security, root detection, engine protocol, log
-  redaction, settings, tunnel parsing, metrics maths).
-- **72 top-level Go tests** across 5 packages (routing, default/secondary sites, `304`/`HEAD`/`405`,
-  traversal reject, ZIP validation + CRC, percentiles `p50 ≤ p95 ≤ max`, command bus).
+- **207 JVM unit tests** across 23 suites (ZIP security, root detection, engine protocol, log
+  redaction, settings, tunnel parsing, metrics maths, plan quotas, proxy rules, per-proxy Host mode).
+- **103 top-level Go tests / 254 test+subtest PASS lines** across 5 packages (routing,
+  default/secondary sites, `304`/`HEAD`/`405`, traversal reject, ZIP validation + CRC, percentiles,
+  command bus, reverse proxy: methods/body/SSE/WebSocket/502/`PROXY_LOOP`/`ports.scan`, Location
+  rewrite, Referer fallback, upstream Host mode).
 - **Instrumented end-to-end run** on the API 36 emulator: real ZIP import → real Go engine → real
-  HTTP (`200`/`304`/`HEAD`/`404`/`405`/traversal-reject/secondary site) → clean stop; STOP→START
-  regression; notification STOP while backgrounded.
+  HTTP (`200`/`304`/`HEAD`/`404`/`405`/traversal-reject/secondary site) → clean stop; proxy E2E
+  (methods, SSE, WebSocket 101, 502, scan); Room 1→3 migration replay; STOP→START regression;
+  notification STOP while backgrounded. Latest run: **20 executed / 0 failed / 6 intentional skips**.
 - Quick Tunnel connected and verified **from an external host** (`curl` → HTTP 200 through
   Cloudflare).
 
@@ -344,10 +387,13 @@ the repository. The Android/Go source tree is maintained privately.
 - `www.downmonitor.app` (and any additional hostname) is not configured yet; only the apex hostname
   is published on the live Named Tunnel.
 - Longest continuous soak so far is a short measured session, not 24 h.
-- Absolute-path assets on **secondary** `/s/<id>/` sites need relative paths (or the Referer
-  fallback added in 1.0.1) — the default site at `/` is unaffected.
+- Absolute-path assets on **secondary** `/s/<id>/` sites are routed back via the page Referer;
+  requests without a Referer (some privacy settings/tools) still fall through to the default site.
+  The default site at `/` is unaffected.
 - Folder import needs a provider that exposes child documents (DocumentsContract); some cloud or file-manager providers only work through a ZIP.
-- Static sites only: no PHP, MySQL, Node.js or Docker.
+- Port proxies reach only a loopback upstream on the same phone; the Termux process must stay
+  running (Android may freeze/kill it). No PHP/Node runtime is embedded, and there is no MySQL/Docker.
+- The per-proxy Host mode is stored with schema v3; existing proxies default to `Preserve client`.
 - Android 17 local-network permission is not yet handled (OS not released at build time).
 
 ## FAQ
@@ -376,8 +422,9 @@ connect Cloudflare Tunnel, and the app asks for confirmation before exposing any
 <details>
 <summary><b>Which sites are supported?</b></summary>
 
-Static sites: HTML, CSS, JavaScript, images, fonts, `wasm` assets. PHP, MySQL, Node.js and Docker
-are **not** supported — PocketHost is intentionally a static-site host.
+Static sites: HTML, CSS, JavaScript, images, fonts, `wasm` assets — plus **port proxies** to a
+Node/PHP/Python/Go server you run in Termux on `127.0.0.1`. No PHP/Node runtime is embedded in the
+APK; MySQL and Docker are not supported.
 </details>
 
 <details>
@@ -392,6 +439,14 @@ Android-only (8.0+ / ARM64).
 
 With a Cloudflare Named Tunnel you can attach any domain you manage in Cloudflare. A built-in
 domain setup wizard is on the roadmap.
+</details>
+
+<details>
+<summary><b>Can I host a Node/PHP/Python app?</b></summary>
+
+Yes — run it in Termux bound to `127.0.0.1:<port>` and add a **port proxy**. PocketHost forwards
+every method, body, SSE and WebSocket upgrade; set the per-proxy Host mode if your dev server
+validates the Host header. The upstream must stay running; otherwise visitors see a branded `502`.
 </details>
 
 ## Troubleshooting
@@ -410,19 +465,23 @@ domain setup wizard is on the roadmap.
 
 - [x] Physical ARM64 execution: live at [downmonitor.app](https://downmonitor.app/) (user-operated Android 16 phone)
 - [x] Named Tunnel end-to-end verification with a real Cloudflare token (2026-11-05)
+- [x] Port proxy mode + upstream scan + branded 502 (1.1.0, 2026-11-06)
+- [x] Prefix-safe redirects, Referer fallback, per-proxy Host mode (1.1.2/1.1.3, 2026-11-06)
 - [ ] 24-hour soak with power/thermal measurements on real hardware
 - [ ] Optional custom domain helper and richer tunnel diagnostics
 - [ ] Play Store build (`specialUse` justification + privacy policy) once device coverage is done
 
 ## 🇹🇷 Türkçe özet
 
-**PocketHost**, sıradan bir Android telefonu statik site barındıran gerçek bir web sunucusuna
-dönüştürür. AI aracından çıkan ZIP'i içe aktar, **BAŞLAT**'a bas; siten aynı Wi-Fi'deki herkes için
-açılır. İstersen Cloudflare Tunnel ile HTTPS üzerinden dünyaya aç.
+**PocketHost**, sıradan bir Android telefonu gerçek bir web sunucusuna dönüştürür. AI aracından
+çıkan ZIP'i içe aktar, **BAŞLAT**'a bas; siten aynı Wi-Fi'deki herkes için açılır. İstersen Termux'ta
+çalışan Node/PHP/Python sunucunu **port proxy** ile aynı adresten yayınla (tüm metotlar, SSE,
+WebSocket) ve her proxy için Host modunu ayrı seç. Cloudflare Tunnel ile HTTPS üzerinden dünyaya aç.
 
 - Root / Termux / Linux **gerekmez**; reklam, hesap ve telemetri **yoktur**.
 - Motor, uygulama sürecinde çalışan **Go `net/http`** sunucusudur (JNI köprüsü, harici süreç yok).
 - Metrikler gerçektir; cihazın vermediği değer "kullanılamıyor" olarak gösterilir.
+- Port proxy'de upstream yalnızca `127.0.0.1:<port>` olabilir; Termux sunucusu açık kalmalıdır.
 - Kurulum: [Releases](../../releases/latest) → `PocketHost-*-arm64.apk` → kur → ZIP'i içe aktar → BAŞLAT.
 - Site (TR/EN/中文): [privyxe.github.io/PocketHost](https://privyxe.github.io/PocketHost/)
 - Lisans: **MIT**.
