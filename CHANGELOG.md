@@ -1,5 +1,167 @@
 # Changelog
 
+## 1.1.3 - 2026-11-06
+
+### Added
+- **Per-proxy upstream Host mode.** Open a proxy site → Serving options → **Upstream Host header**:
+  `Preserve client` (default; original Host + X-Forwarded-Host) or `Upstream loopback`
+  (`127.0.0.1:<port>` for Vite `allowedHosts`, localhost-only dev servers, ...). Each proxy stores
+  its own choice; the running engine hot-applies it via the normal site sync — no restart needed.
+- **Settings → Default proxy Host** sets the initial mode for **newly added** proxies only; existing
+  proxies keep their per-site setting.
+
+### Changed
+- Version 1.1.3 (versionCode 10); release re-signed with the project JKS.
+- Room schema v3 with an additive `MIGRATION_2_3` (`sites.upstreamHostMode TEXT NOT NULL DEFAULT
+  'preserve'`); existing proxies keep the 1.1.2 preserve behaviour on upgrade.
+- README/KNOWN-LIMITATIONS/phase-8 updated for per-proxy Host selection.
+
+### Verified
+- Go: 103 top-level / 254 test+subtest PASS, 0 failures (engine unchanged; already accepted the
+  per-site `upstreamHostMode` field).
+- JVM: 207 tests / 23 suites, 0 failures.
+- Instrumented: 20 executed / 0 failed / 6 skipped, including the revised migration replay
+  (`user_version` 1→3, `upstreamHostMode` column exists, legacy row defaults to `preserve`, a
+  `port_proxy` row with `upstream` round-trips).
+- Emulator: the proxy detail selector switched live between `host: 127.0.0.1:3000` (upstream) and
+  `host: 127.0.0.1:8080` (preserve); the chosen mode persisted in the UI.
+- Release artefact: `dist/PocketHost-1.1.3-arm64.apk`, SHA-256
+  `67a95db06e84dba09f7ed74b02a95b173bbc49857ffb2c06d240c756015d6b37`.
+## 1.1.2 - 2026-11-06
+
+### Added
+- **Prefix-safe redirects.** A proxy mounted under `/s/<id>/` now rewrites absolute-path `Location`
+  responses (`/login` → `/s/<id>/login`). Relative, scheme-relative and absolute-URL redirects are
+  left untouched; the default site at `/` is unaffected.
+- **Referer fallback for absolute assets.** When a page served from `/s/<id>/` asks for an absolute
+  path such as `/app.css`, the request is routed to that proxy (with `X-Forwarded-Prefix`) instead of
+  falling through to the default site. Fixes Node/PHP/Python apps that emit root-absolute asset or
+  API URLs without rewriting their code.
+- **Global "Proxy upstream Host" setting** (Settings → Embedded server): `Preserve client` (default,
+  current behaviour) or `Upstream 127.0.0.1` for dev servers that validate the Host header (Vite
+  `allowedHosts`, Django `ALLOWED_HOSTS`, Rails). Applies to every port proxy immediately; the
+  original client host always stays available as `X-Forwarded-Host`.
+
+### Changed
+- Version 1.1.2 (versionCode 9); release re-signed with the project JKS.
+- README/KNOWN-LIMITATIONS/phase-8 updated: the absolute-redirect and Host-header limitations are
+  now addressed (with the remaining caveats documented).
+
+### Verified
+- Go: 103 top-level tests / 254 test+subtest PASS lines, 0 failures. New
+  `TestProxyPrefixRedirectLocationIsRewritten`, `TestProxyRefererFallbackRoutesAbsoluteAssets`,
+  `TestProxyUpstreamHostMode`.
+- JVM: 207 tests / 23 suites, 0 failures (new `proxySiteSendsUpstreamHostModeOnlyWhenEnabled`).
+- Instrumented: 20 executed / 0 failed / 6 skipped on Android 16 / API 36.
+- Emulator end-to-end: `/s/<proxy>/go` → `302 Location: /s/<proxy>/after` and `curl -L` follows to
+  `200`; upstream-Host mode shows `host: 127.0.0.1:3000` at the upstream, preserve mode shows the
+  client host; Settings label and diagnostics report app 1.1.2 / engine 1.1.0.
+- Release artefact: `dist/PocketHost-1.1.2-arm64.apk` (13.77 MB), SHA-256
+  `1f3adf5a0045bd598064964039a9765173fda70b358373d4d01776cda3a4d86e`.
+## 1.1.1 - 2026-11-06
+
+### Fixed
+- **PROXY_LOOP is now enforced on hot sync, not only at `server.start`.** A port proxy pointing at the
+  engine's own listening port (default `:8080`) could be added while hosting was running; `sites.sync`
+  applied it, and the first request would recurse into the engine forever. `sites.sync` now rejects the
+  update with `PROXY_LOOP` and restores the previous registry, so currently served sites keep working.
+  Defense in depth: the Add-port-proxy screen filters the engine port out of the scan and rejects it in
+  manual entry, and `AppRepository.addProxySite` refuses to persist it (`RESERVED_PORT`).
+- Development-tier copy is consistent ("Development tier" instead of a mix with "Free tier").
+- Setting the default site now says "restart hosting to apply" — the engine applies the default on the
+  next hosting start.
+- The Sites import FAB has a TalkBack label.
+
+### Changed
+- Version 1.1.1 (versionCode 8); release re-signed with the project JKS.
+- Docs: proxy limitations for absolute `Location` redirects and host-header validation.
+
+### Verified
+- Go: 100 top-level tests / 251 test+subtest PASS lines, 0 failures (new
+  `TestSitesSyncRejectsProxyLoop`).
+- JVM: 206 tests / 23 suites, 0 failures (new `enginePortIsReservedAsAProxyTarget`).
+- Emulator: the scan no longer lists `:8080`; manual `8080` shows the reserved-port error; the import
+  FAB exposes its TalkBack label; the release APK is signed v2+v3, versionCode 8 / 1.1.1, SHA-256
+  `5f25b3c4d5f9adfc5ae06f81c391bd7681560d4ed7a679012d95640198ba3112`.
+## 1.1.0 - 2026-11-06
+
+### Added
+- **Port proxy mode — host a Termux backend with 0 MB of extra APK.** Start any server on the
+  phone's loopback (`node server.js` :3000, `php -S 127.0.0.1:8000`, `python -m http.server` :9000,
+  a Go binary, …), then **Sites → ADD PORT PROXY** and point a proxied site at that port. The Go
+  engine reverse-proxies `127.0.0.1:<port>` with all HTTP methods, request bodies, query strings,
+  streaming/SSE and **WebSocket** upgrades (Vite/Next HMR, Express/Hono, Flask). No Node/PHP binary
+  is embedded and nothing is executed inside the app — the "500 MB bloat" alternative was rejected.
+- **Automatic upstream discovery.** New `ports.scan` engine op probes the common dev ports
+  concurrently (default list of 18, `timeoutMs` 50–1000, sorted `active`); the Add-port-proxy screen
+  lists what is actually listening with friendly labels (Node/Express, Vite, PHP/Python, Angular,
+  Flask, …) and one-tap selection.
+- **Honest upstream state.** The site card and detail screen show a real UPSTREAM ONLINE/OFFLINE
+  check; an offline upstream produces a branded `502` page naming the port and the Termux commands
+  to start it (`X-PocketHost-Proxy-Error: upstream_offline`), also written to the engine log ring.
+- **Development-tier plan gate.** `PlanPolicy` is the single source of truth: free tier = **1 static
+  website + 1 port proxy**, independent quotas. New-import entry points show a "Development tier ·
+  1 of 1 website" dialog; re-import/replacing the existing site is never blocked; adding a second
+  proxy is disabled with a slot counter. Premium (`PlanPolicy.isPremium`) unlocks unlimited slots
+  later; the Go engine has no site-count limit so no engine rebuild is needed for that.
+- **Engine 1.1.0 site schema (additive).** `Site.type` = `static` | `port_proxy`, `Site.targetPort`.
+  Old clients remain compatible (missing `type` ⇒ static); `engine.info` reports
+  `capabilities: [static, port_proxy, ports.scan]`. `PROXY_LOOP` rejects a proxy pointing at the
+  engine's own listening port (registry rolled back).
+- **Room schema v2 with a real migration:** `MIGRATION_1_2` adds `sites.siteType` (default
+  `static`) and `sites.targetPort` via `ALTER TABLE`, preserving existing websites across the
+  upgrade (no destructive drop on 1→2).
+- **Proxy-aware UI:** sites list badge `PORT PROXY · :3000` + "Termux upstream" instead of storage
+  stats; proxy detail screen with upstream/proxied URLs, live status, copyable Termux commands,
+  enable/rename/delete; proxied preview labels; tier-limit dialog.
+
+### Changed
+- Version 1.1.0 (versionCode 7); release APK 13.76 MB (+0.254 MB vs 1.0.5), signed with the
+  project JKS, R8-minified, `arm64-v8a` only.
+- Engine AAR 11.81 MB (both ABIs; +0.83 MiB for the proxy + scan implementation), 16 KB
+  page-aligned, rebuilt from source.
+- `tools/env.ps1`: `GRADLE_BIN` fixed to the Gradle 8.13 distribution the wrapper actually pins
+  (was a stale, incomplete 8.9 path), with a fallback to `android/gradlew.bat`.
+- Documentation: README (port proxy quick start/FAQ/limitations), integration contract §3.3–3.6 +
+  §8a/§8b, architecture "Hosting modes", known limitations, and the frozen design contract
+  `docs/plans/port-proxy-and-dev-tier.md`.
+
+### Fixed
+- **In-app copy no longer claims static-only hosting.** Settings → About, the first-run dashboard card
+  and the Tunnel public-exposure notice now describe the real product: static sites **and** port
+  proxies forwarding to a Termux upstream (Node.js/PHP/Python/Go), with the limitations list updated
+  accordingly ("Static sites + port proxies"; no embedded Node/PHP runtime). Copy-only change.
+- Instrumented `NotificationActionTest` asserted the pre-1.0.5 notification title ("Stop") and raced
+  the transient "Starting…" notification; it now waits for the steady-state notification and
+  asserts the shipped `[Open website, Stop hosting]` actions (test-only fix, no product change).
+- Instrumented `HostingEndToEndTest` imported two static sites to prove `/s/<id>/` routing; it now
+  opts into premium for that fixture (`PlanPolicy.isPremium` in `@Before`, restored in `@After`) so
+  the multi-site engine path stays covered while the free tier is enforced elsewhere by unit tests.
+
+### Verified
+- Go: `gofmt`/`go vet` clean, `go test -count=1 ./...` all 5 packages green — 99 top-level test
+  functions (baseline 72), 250 test/subtest PASS lines, 0 failures. New tests drive real
+  `httptest` upstreams and a real bound engine server: path/query/body/method forwarding,
+  `/s/<id>` strip + `X-Forwarded-Prefix`, vhost routing, SSE incremental flush, raw-TCP WebSocket
+  101 echo, `502` offline page+log+metrics, `PROXY_LOOP` rollback, `ports.scan` validation and
+  active-port detection.
+- JVM: 205 tests / 23 suites, 0 failures (+31 new: `PlanPolicy`, proxy repository rules,
+  `SiteSpec`/`port_proxy` JSON, `ports.scan` parsing, mapper round-trip).
+- Instrumented on Android 16 / API 36 x86_64 emulator: full suite 20 executed / 0 failed / 6
+  intentional skips — including new `PortProxyEndToEndTest` **7/7 PASS** (GET/POST/PUT/PATCH/DELETE,
+  forwarded headers, prefix strip, vhost, SSE incremental, WebSocket 101 echo, 502, scan) and
+  `DatabaseMigrationTest` **PASS**, which replays the real Room 1→2 upgrade on-device: legacy v1
+  site + settings + request history survive, `siteType='static'`/`targetPort IS NULL`, and a new
+  `port_proxy` row round-trips (`user_version` becomes 2; no destructive fallback registered).
+- End-to-end on-device proof: a real host-side Python upstream exposed via `adb reverse tcp:3000`,
+  added through the real app UI, served through `http://<phone>:8080/s/<proxy-id>/` →
+  `HTTP 200` with the upstream-only marker `POCKETHOST_UPSTREAM_OK`; stopping the upstream produced
+  the branded `502` page. Screenshots: `proxy-add-scan-light.png`, `proxy-sites-light.png`,
+  `proxy-detail-light.png`, `proxy-endtoend.png`, `proxy-offline.png`, `proxy-tier-gate-light.png`.
+- Release artefact: `dist/PocketHost-1.1.0-arm64.apk` (14,430,908 B = 13.76 MB, +0.255 MB vs
+  1.0.5), `apksigner` v2+v3 verified, signer `CN=PocketHost` from the release JKS (not the Android
+  debug key), SHA-256 `55a88252661b6724200519f5619caaba6a3d16361ab3ec7e809f8b62fef3ee2e`.
+
 ## 1.0.5 - 2026-11-05
 
 ### Fixed
