@@ -19,7 +19,7 @@ with Cloudflare Tunnel.
   <img alt="Go" src="https://img.shields.io/badge/Go-stdlib%20only-00ADD8?style=flat-square&logo=go&logoColor=white" />
 </p>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.1.3-0f766e?style=flat-square" />
+  <img alt="Version" src="https://img.shields.io/badge/version-1.1.4-0f766e?style=flat-square" />
   <img alt="APK size" src="https://img.shields.io/badge/APK-13.77%20MB-0f766e?style=flat-square" />
   <img alt="Tests" src="https://img.shields.io/badge/tests-207%20JVM%20%C2%B7%20103%20Go-2dd4bf?style=flat-square" />
   <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-0f766e?style=flat-square" />
@@ -46,9 +46,9 @@ Get the signed APK from **[Releases](../../releases/latest)**:
 
 | File | Details |
 |---|---|
-| `PocketHost-1.1.3-arm64.apk` | 13.77 MB · `arm64-v8a` only · Android 8.0+ · signed v2+v3 |
-| `PocketHost-1.1.3-arm64.apk.sha256` | SHA-256 checksum — verify before installing |
-| `PocketHost-1.1.3.json` | machine-readable build manifest (versionCode 10) |
+| `PocketHost-1.1.4-arm64.apk` | 13.77 MB · `arm64-v8a` only · Android 8.0+ · signed v2+v3 |
+| `PocketHost-1.1.4-arm64.apk.sha256` | SHA-256 checksum — verify before installing |
+| `PocketHost-1.1.4.json` | machine-readable build manifest (versionCode 11) |
 
 > **Sideload only.** PocketHost is not on Google Play. No account, no ads, no analytics.
 > Install: open the APK on an **ARM64** Android 8.0+ phone → allow "install unknown apps" → install.
@@ -112,7 +112,7 @@ prototypes, portfolios and local testing.
 
 | | |
 |---|---|
-| **Release** | `1.1.3` (versionCode 10) — signed ARM64 APK, 13.77 MB, `arm64-v8a` only |
+| **Release** | `1.1.4` (versionCode 11) — signed ARM64 APK, 13.77 MB, `arm64-v8a` only |
 | **Signed with** | project JKS, APK Signature Scheme **v2 + v3**, R8-minified |
 | **Verified on** | Android 16 / API 36 emulator (x86_64): import → host → real HTTP round-trips, proxy E2E (all methods, SSE, WebSocket 101, 502, scan), Room 1→3 migration; **verified live** on a physical Android 16 phone via Named Tunnel → [downmonitor.app](https://downmonitor.app/) |
 | **Engine** | Go stdlib `net/http` + `httputil.ReverseProxy`, embedded via `gomobile bind` (`libgojni.so`), 16 KB page-aligned; reverse proxy is loopback-only |
@@ -168,7 +168,7 @@ prototypes, portfolios and local testing.
   or `Upstream loopback` (`127.0.0.1:<port>` for Vite `allowedHosts`, Django `ALLOWED_HOSTS`, ...).
 - If the upstream is offline, visitors get a branded **502** page naming the port and the Termux
   command to start it — never a fake success page. The app shows a live upstream-ONLINE check.
-- Development tier: **1 static website + 1 port proxy** (independent quotas). No Node/PHP runtime is
+- Development tier: **1 static website + 3 port proxies** (independent quotas). No Node/PHP runtime is
   embedded; nothing is executed inside the app.
 
 ### Import
@@ -466,7 +466,7 @@ validates the Host header. The upstream must stay running; otherwise visitors se
 - [x] Physical ARM64 execution: live at [downmonitor.app](https://downmonitor.app/) (user-operated Android 16 phone)
 - [x] Named Tunnel end-to-end verification with a real Cloudflare token (2026-11-05)
 - [x] Port proxy mode + upstream scan + branded 502 (1.1.0, 2026-11-06)
-- [x] Prefix-safe redirects, Referer fallback, per-proxy Host mode (1.1.2/1.1.3, 2026-11-06)
+- [x] Prefix-safe redirects, Referer fallback, per-proxy Host mode (1.1.2/1.1.4, 2026-11-06)
 - [ ] 24-hour soak with power/thermal measurements on real hardware
 - [ ] Optional custom domain helper and richer tunnel diagnostics
 - [ ] Play Store build (`specialUse` justification + privacy policy) once device coverage is done

@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.1.4 - 2026-11-06
+
+### Changed
+- **Development tier now allows 1 static website + 3 port proxies** (was 1 proxy). Termux users
+  typically run several dev servers at once (Vite `:5173`, API `:3000`, PHP `:8000`), so the proxy
+  slot was the real bottleneck. Static-site quota stays at 1; the two quotas remain independent.
+- Tier copy updated everywhere: Sites footer, Add-port-proxy "slot in use" notice, and the
+  `PlanPolicy.PROXY_LIMIT_MESSAGE` ("Development tier allows 3 port proxies…").
+- Version 1.1.4 (versionCode 11); release re-signed with the project JKS.
+
+### Verified
+- JVM: 207 tests / 23 suites, 0 failures — `PlanPolicyTest` now covers 3 accepted proxies, the
+  4th rejected, and both independent quotas filled.
+- Emulator: Sites footer shows "1 website · 3 port proxies"; Add-port-proxy shows "0 of 3".
+- Release artefact: `dist/PocketHost-1.1.4-arm64.apk`, SHA-256
+  `56f4398a3f229774ed23a71745f7a59baee6899c60583022ae82a2f5979e0b15`.
+
 ## 1.1.3 - 2026-11-06
 
 ### Added
